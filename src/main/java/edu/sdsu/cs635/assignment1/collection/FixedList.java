@@ -3,9 +3,9 @@ package edu.sdsu.cs635.assignment1.collection;
 import java.util.ArrayList;
 
 /**
- * This is a custom sub-class of arraylist to mimic the behavior or arrays with fixed size
- * This Class with initialize a list of size n with null values
- * Any value added to the list at an index will replace the null value without increasing the size of the list
+ * This is a custom sub-class of {@link ArrayList} to mimic the behavior of arrays with fixed size.
+ * This Class with initialize a list of size n with null values.
+ * Any value added to the list at an index will replace the null value without increasing the size of the list.
  * Any value added to the list without an index will replace the first available null element.
  *
  * @param <T>
