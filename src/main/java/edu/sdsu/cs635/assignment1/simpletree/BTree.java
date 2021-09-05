@@ -22,9 +22,9 @@ public class BTree implements Tree<Student> {
     }
 
     /**
-     * this function adds a value and balances the b-tree
+     * this function adds a value and balances the BTree
      *
-     * @param value adds a value of type Student to the Tree.
+     * @param value adds a value of type Student to the BTree.
      */
     @Override
     public void add(Student value) {
@@ -56,7 +56,7 @@ public class BTree implements Tree<Student> {
 
     private Node navigateRight(Node node, Student value) {
         /*
-        For b-tree the highest possible value in a node is the last value
+        For BTree the highest possible value in a node is the last value
         And the highest possible child node is the right most node
         */
         int indexOfLastElementInNode = node.getNoOfElementsInNode() - 1;
@@ -70,7 +70,7 @@ public class BTree implements Tree<Student> {
 
     private Node navigateLeft(Node node, Student value) {
         /*
-        For b-tree the lowest possible value in a node is the first value
+        For BTree the lowest possible value in a node is the first value
         And the lowest possible child node is the left most node
         */
         Student lowestComparableValue = node.valueAtIndex(0);
@@ -235,7 +235,7 @@ public class BTree implements Tree<Student> {
     }
 
     /**
-     * @return size of the elements in b-tree.
+     * @return size of the elements in BTree.
      */
     @Override
     public int size() {
