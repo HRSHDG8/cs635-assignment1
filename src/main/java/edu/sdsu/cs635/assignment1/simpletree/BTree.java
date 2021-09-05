@@ -34,27 +34,31 @@ public class BTree implements Tree<Student> {
             root = new Node(null, order);
             root.addValue(value);
         } else {
-            Node node = root;
-            while (!isNull(node)) {
-                if (checkAndInsertInCurrentNode(node, value)) {
+            Node currentNode = root;
+            while (!isNull(currentNode)) {
+                if (checkAndInsertInCurrentNode(currentNode, value)) {
                     break;
                 }
-                Node leftNode = navigateLeft(node, value);
+                Node leftNode = navigateLeft(currentNode, value);
                 if (!isNull(leftNode)) {
-                    node = leftNode;
+                    currentNode = leftNode;
                     continue;
                 }
-                Node rightNode = navigateRight(node, value);
+                Node rightNode = navigateRight(currentNode, value);
                 if (!isNull(rightNode)) {
-                    node = rightNode;
+                    currentNode = rightNode;
                     continue;
                 }
-                node = medianNode(value, node);
+                currentNode = medianNode(value, currentNode);
             }
         }
     }
 
     private Node navigateRight(Node node, Student value) {
+        /*
+        For b-tree the highest possible value in a node is the last value
+        And the highest possible child node is the right most node
+        */
         int indexOfLastElementInNode = node.getNoOfElementsInNode() - 1;
         Node rightNode = null;
         Student highestComparableValue = node.valueAtIndex(indexOfLastElementInNode);
@@ -65,6 +69,10 @@ public class BTree implements Tree<Student> {
     }
 
     private Node navigateLeft(Node node, Student value) {
+        /*
+        For b-tree the lowest possible value in a node is the first value
+        And the lowest possible child node is the left most node
+        */
         Student lowestComparableValue = node.valueAtIndex(0);
         Node leftNode = null;
         if (value.compareTo(lowestComparableValue) <= 0) {
@@ -111,13 +119,17 @@ public class BTree implements Tree<Student> {
         int noOfElementsInNode = underSplit.getNoOfElementsInNode();
         int medianIndex = noOfElementsInNode / 2;
         Student medianValue = underSplit.valueAtIndex(medianIndex);
+        //start the split for the node from 0th index to the one before median for the values and child nodes
         int leftStartIndex = 0;
         int leftValueEndIndex = medianIndex - 1;
         int leftChildEndIndex = medianIndex;
+        // Create a child node for the left section of the current node being spilt.
         Node left = getNodeValuesAndChildrenInRange(underSplit, leftStartIndex, leftValueEndIndex, leftChildEndIndex);
+        //start the split for the node from (median + 1) index to the last value for the values and the last child nodes
         int rightStartIndex = medianIndex + 1;
         int rightValueEndIndex = noOfElementsInNode - 1;
         int rightChildEndIndex = underSplit.getNoOfChildNodes() - 1;
+        // Create a child node for the right section of the current node being spilt.
         Node right = getNodeValuesAndChildrenInRange(underSplit, rightStartIndex, rightValueEndIndex, rightChildEndIndex);
         // a new parent or root node must be created if a parent does not exist
         boolean shouldCreateNewRoot = isNull(underSplit.getParent());
@@ -135,6 +147,7 @@ public class BTree implements Tree<Student> {
             parent.removeChild(underSplit);
             parent.addChild(left);
             parent.addChild(right);
+            // if the parent overflows or is unbalanced, apply split and balance on it.
             if (parent.getNoOfElementsInNode() > maximumValuesInNode) {
                 splitAndBalance(parent);
             }
@@ -182,9 +195,12 @@ public class BTree implements Tree<Student> {
     public Student findElementByIndex(int index) {
         if (!isIndexOutOfBound(index)) {
             int current = -1;
+            // Create a stack to maintain the current node under traversal and the index to start traversing the value from.
             Stack<NodeIndexEntry> recursionStack = new Stack<>();
+            //start from the root node and 0th index.
             recursionStack.push(new NodeIndexEntry(root, 0));
             while (!recursionStack.isEmpty()) {
+                // start popping each stack element and traverse it until the stack is empty
                 NodeIndexEntry currentNodeIndex = recursionStack.pop();
                 Node currentNode = currentNodeIndex.getNode();
                 int stackIndex = currentNodeIndex.getStartIndex();
