@@ -115,36 +115,37 @@ public class BTree implements Tree<Student> {
      * @param nodeToSplit split the current node and balance the tree
      */
     private void splitAndBalance(Node nodeToSplit) {
-        Node underSplit = nodeToSplit;
-        int noOfElementsInNode = underSplit.getNoOfElementsInNode();
+        Node nodeUndergoingSplit = nodeToSplit;
+        int noOfElementsInNode = nodeUndergoingSplit.getNoOfElementsInNode();
         int medianIndex = noOfElementsInNode / 2;
-        Student medianValue = underSplit.valueAtIndex(medianIndex);
+        Student medianValue = nodeUndergoingSplit.valueAtIndex(medianIndex);
         //start the split for the node from 0th index to the one before median for the values and child nodes
         int leftStartIndex = 0;
         int leftValueEndIndex = medianIndex - 1;
         int leftChildEndIndex = medianIndex;
         // Create a child node for the left section of the current node being spilt.
-        Node left = getNodeValuesAndChildrenInRange(underSplit, leftStartIndex, leftValueEndIndex, leftChildEndIndex);
+        Node left = getNodeValuesAndChildrenInRange(nodeUndergoingSplit, leftStartIndex, leftValueEndIndex, leftChildEndIndex);
         //start the split for the node from (median + 1) index to the last value for the values and the last child nodes
         int rightStartIndex = medianIndex + 1;
         int rightValueEndIndex = noOfElementsInNode - 1;
-        int rightChildEndIndex = underSplit.getNoOfChildNodes() - 1;
+        int rightChildEndIndex = nodeUndergoingSplit.getNoOfChildNodes() - 1;
         // Create a child node for the right section of the current node being spilt.
-        Node right = getNodeValuesAndChildrenInRange(underSplit, rightStartIndex, rightValueEndIndex, rightChildEndIndex);
+        Node right = getNodeValuesAndChildrenInRange(nodeUndergoingSplit, rightStartIndex, rightValueEndIndex, rightChildEndIndex);
         // a new parent or root node must be created if a parent does not exist
-        boolean shouldCreateNewRoot = isNull(underSplit.getParent());
+        boolean shouldCreateNewRoot = isNull(nodeUndergoingSplit.getParent());
         if (shouldCreateNewRoot) {
             Node newRoot = new Node(null, order);
             newRoot.addValue(medianValue);
-            underSplit.setParent(newRoot);
+            nodeUndergoingSplit.setParent(newRoot);
+            //repoint BTrees' root to the newly created root node
             root = newRoot;
-            underSplit = root;
-            underSplit.addChild(left);
-            underSplit.addChild(right);
+            nodeUndergoingSplit = root;
+            nodeUndergoingSplit.addChild(left);
+            nodeUndergoingSplit.addChild(right);
         } else {
-            Node parent = underSplit.getParent();
+            Node parent = nodeUndergoingSplit.getParent();
             parent.addValue(medianValue);
-            parent.removeChild(underSplit);
+            parent.removeChild(nodeUndergoingSplit);
             parent.addChild(left);
             parent.addChild(right);
             // if the parent overflows or is unbalanced, apply split and balance on it.
@@ -194,7 +195,7 @@ public class BTree implements Tree<Student> {
     @Override
     public Student findElementByIndex(int index) {
         if (!isIndexOutOfBound(index)) {
-            int current = -1;
+            int currentTraversalIndex = -1;
             // Create a stack to maintain the current node under traversal and the index to start traversing the value from.
             Stack<NodeIndexEntry> recursionStack = new Stack<>();
             //start from the root node and 0th index.
@@ -206,16 +207,17 @@ public class BTree implements Tree<Student> {
                 int stackIndex = currentNodeIndex.getStartIndex();
                 Node child = currentNode.getChildAtIndex(stackIndex);
                 if (isNull(child)) {
+                    //if the current node has no child node, check if of its element
                     for (int i = 0; i < currentNode.getNoOfElementsInNode(); i++) {
-                        current++;
-                        if (index == current) {
+                        currentTraversalIndex++;
+                        if (index == currentTraversalIndex) {
                             return currentNode.valueAtIndex(i);
                         }
                     }
                 } else {
                     if (stackIndex > 0) {
-                        current++;
-                        if (index == current) {
+                        currentTraversalIndex++;
+                        if (index == currentTraversalIndex) {
                             return currentNode.valueAtIndex(stackIndex - 1);
                         }
                     }
