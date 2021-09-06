@@ -13,6 +13,7 @@ public class DebuggingPrinter implements Printable<Node> {
      */
     @Override
     public void print(Node treeNodeToBePrinted) {
+        //Start printing the tree with an empty prefix
         treeNodeToBePrinted.print("");
     }
 }
