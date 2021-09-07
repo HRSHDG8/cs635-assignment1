@@ -7,9 +7,9 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
- * A post order traversal of {@link Node} class,
+ * A Reverse Order traversal of {@link Node} class,
  * A predicate to test a node value
- * A consumer that would be applied if the above predicate holds true.
+ * A consumer that would be applied if the respective predicate holds true.
  */
 public class ReverseOrderConditionalPrinter implements Printable<Node> {
 
