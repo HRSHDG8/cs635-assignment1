@@ -1,7 +1,7 @@
-package edu.sdsu.cs635.assignment1.simpletree;
+package hmaheshwari8095.redid825027067.cs635.assignment1.simpletree;
 
-import edu.sdsu.cs635.assignment1.model.Student;
-import edu.sdsu.cs635.assignment1.printer.DebuggingPrinter;
+import hmaheshwari8095.redid825027067.cs635.assignment1.model.Student;
+import hmaheshwari8095.redid825027067.cs635.assignment1.printer.DebuggingPrinter;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

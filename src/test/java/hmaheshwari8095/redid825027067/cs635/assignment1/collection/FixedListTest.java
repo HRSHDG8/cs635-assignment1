@@ -1,4 +1,4 @@
-package edu.sdsu.cs635.assignment1.collection;
+package hmaheshwari8095.redid825027067.cs635.assignment1.collection;
 
 import org.junit.jupiter.api.Test;
 

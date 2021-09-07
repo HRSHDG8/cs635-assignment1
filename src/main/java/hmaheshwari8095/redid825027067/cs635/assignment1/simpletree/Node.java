@@ -1,7 +1,7 @@
-package edu.sdsu.cs635.assignment1.simpletree;
+package hmaheshwari8095.redid825027067.cs635.assignment1.simpletree;
 
-import edu.sdsu.cs635.assignment1.collection.FixedList;
-import edu.sdsu.cs635.assignment1.model.Student;
+import hmaheshwari8095.redid825027067.cs635.assignment1.collection.FixedList;
+import hmaheshwari8095.redid825027067.cs635.assignment1.model.Student;
 
 import java.util.Comparator;
 import java.util.List;

@@ -1,8 +1,8 @@
-package edu.sdsu.cs635.assignment1.simpletree;
+package hmaheshwari8095.redid825027067.cs635.assignment1.simpletree;
 
-import edu.sdsu.cs635.assignment1.model.NodeIndexEntry;
-import edu.sdsu.cs635.assignment1.model.Student;
-import edu.sdsu.cs635.assignment1.printer.Printable;
+import hmaheshwari8095.redid825027067.cs635.assignment1.model.NodeIndexEntry;
+import hmaheshwari8095.redid825027067.cs635.assignment1.model.Student;
+import hmaheshwari8095.redid825027067.cs635.assignment1.printer.Printable;
 
 import java.util.Stack;
 

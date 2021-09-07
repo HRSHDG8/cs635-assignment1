@@ -1,4 +1,4 @@
-package edu.sdsu.cs635.assignment1.model;
+package hmaheshwari8095.redid825027067.cs635.assignment1.model;
 
 /**
  * Student class holds vital information pertaining to a student.

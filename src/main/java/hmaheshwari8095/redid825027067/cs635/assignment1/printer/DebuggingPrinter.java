@@ -1,6 +1,6 @@
-package edu.sdsu.cs635.assignment1.printer;
+package hmaheshwari8095.redid825027067.cs635.assignment1.printer;
 
-import edu.sdsu.cs635.assignment1.simpletree.Node;
+import hmaheshwari8095.redid825027067.cs635.assignment1.simpletree.Node;
 
 /**
  * Used to print the tree by DFS Left to Right Approach

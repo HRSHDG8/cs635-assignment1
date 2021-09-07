@@ -1,6 +1,6 @@
-package edu.sdsu.cs635.assignment1.model;
+package hmaheshwari8095.redid825027067.cs635.assignment1.model;
 
-import edu.sdsu.cs635.assignment1.simpletree.Node;
+import hmaheshwari8095.redid825027067.cs635.assignment1.simpletree.Node;
 
 /**
  * Simple class to encapsulate the current node under check and its index

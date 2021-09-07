@@ -1,7 +1,7 @@
-package edu.sdsu.cs635.assignment1.printer;
+package hmaheshwari8095.redid825027067.cs635.assignment1.printer;
 
-import edu.sdsu.cs635.assignment1.model.Student;
-import edu.sdsu.cs635.assignment1.simpletree.Node;
+import hmaheshwari8095.redid825027067.cs635.assignment1.model.Student;
+import hmaheshwari8095.redid825027067.cs635.assignment1.simpletree.Node;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;

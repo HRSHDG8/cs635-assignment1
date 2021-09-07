@@ -1,7 +1,7 @@
-package edu.sdsu.cs635.assignment1.simpletree;
+package hmaheshwari8095.redid825027067.cs635.assignment1.simpletree;
 
-import edu.sdsu.cs635.assignment1.model.Student;
-import edu.sdsu.cs635.assignment1.printer.ReverseOrderConditionalPrinter;
+import hmaheshwari8095.redid825027067.cs635.assignment1.model.Student;
+import hmaheshwari8095.redid825027067.cs635.assignment1.printer.InOrderConditionalPrinter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,10 @@ import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class PerfectGpaTest {
+/**
+ * A student is considered as probationary if his gpa is < 2.85
+ */
+public class ProbationaryGPATest {
   private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
   private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
   private final PrintStream originalOut = System.out;
@@ -30,15 +33,15 @@ public class PerfectGpaTest {
   }
 
   @Test
-  public void studentsWithPerfectGpa() {
+  public void gpaDefaultersTest() {
     BTree studentTree = new BTree(3);
-    studentTree.add(new Student(825027001L, "a", 4.00)); // prefect score
-    studentTree.add(new Student(825027002L, "b", 3.30));
-    studentTree.add(new Student(825027003L, "c", 2.80));
-    studentTree.add(new Student(825027004L, "d", 3.10));
-    studentTree.add(new Student(825027005L, "e", 4.00)); //perfect score
+    studentTree.add(new Student(825027001L, "a", 3.6));
+    studentTree.add(new Student(825027002L, "b", 3.3));
+    studentTree.add(new Student(825027003L, "c", 2.8));
+    studentTree.add(new Student(825027004L, "d", 3.1));
+    studentTree.add(new Student(825027005L, "e", 2.85));
     studentTree.add(new Student(825027006L, "f", 2.84));
-    studentTree.print(new ReverseOrderConditionalPrinter(Student::isPerfectScore, Student::printName));
-    assertTrue(outContent.toString().contains("e") && outContent.toString().contains("a"));
+    studentTree.print(new InOrderConditionalPrinter(Student::amIProbationary, Student::printRedId));
+    assertTrue(outContent.toString().contains("825027003"));
   }
 }
