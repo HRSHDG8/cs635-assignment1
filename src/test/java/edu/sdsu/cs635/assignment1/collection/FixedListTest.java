@@ -11,7 +11,7 @@ public class FixedListTest {
     @Test
     public void checkListBounds() {
         List<Integer> primeNumberList = new FixedList<>(2);
-        assertTrue(primeNumberList.add(1));
+        assertTrue(primeNumberList.add(7));
         assertTrue(primeNumberList.add(2));
         assertFalse(primeNumberList.add(3));
     }
