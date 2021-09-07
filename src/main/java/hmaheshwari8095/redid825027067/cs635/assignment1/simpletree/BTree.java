@@ -193,7 +193,7 @@ public class BTree<T extends Comparable<T>> implements Tree<T> {
    * @return the T Object found at index, if out of bounds throws {@link IndexOutOfBoundsException}
    */
   @Override
-  public T findElementByIndex(int index) throws IndexOutOfBoundsException {
+  public T get(int index) throws IndexOutOfBoundsException {
     if (!isIndexOutOfBound(index)) {
       int currentTraversalIndex = -1;
       // Create a stack to maintain the current node under traversal and the index to start traversing the value from.

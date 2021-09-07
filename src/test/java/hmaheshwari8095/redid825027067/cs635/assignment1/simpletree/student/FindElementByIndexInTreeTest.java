@@ -16,7 +16,7 @@ public class FindElementByIndexInTreeTest {
     tree.add(new Student(825027001L, "b", 3.3));
     tree.add(new Student(825027001L, "d", 3.8));
     tree.add(new Student(825027001L, "c", 3.1));
-    Student third = tree.findElementByIndex(1);
+    Student third = tree.get(1);
     assertEquals("b", third.getName());
   }
 
@@ -27,7 +27,7 @@ public class FindElementByIndexInTreeTest {
     studentTree.add(new Student(825027001L, "b", 3.3));
     studentTree.add(new Student(825027001L, "d", 3.8));
     studentTree.add(new Student(825027001L, "c", 3.1));
-    Student third = studentTree.findElementByIndex(0);
+    Student third = studentTree.get(0);
     assertEquals("a", third.getName());
   }
 
@@ -38,27 +38,27 @@ public class FindElementByIndexInTreeTest {
     studentTree.add(new Student(825027001L, "b", 3.3));
     studentTree.add(new Student(825027001L, "d", 3.8));
     studentTree.add(new Student(825027001L, "c", 3.1));
-    Student third = studentTree.findElementByIndex(3);
+    Student third = studentTree.get(3);
     assertEquals("d", third.getName());
   }
 
   @Test
   public void findStudentByIndexWhenTreeIsEmpty() {
     Tree<Student> studentTree = new BTree<>(3);
-    assertThrows(IndexOutOfBoundsException.class, () -> studentTree.findElementByIndex(1));
+    assertThrows(IndexOutOfBoundsException.class, () -> studentTree.get(1));
   }
 
   @Test
   public void findStudentByIndexNegativeIndex() {
     Tree<Student> studentTree = new BTree<>(3);
     studentTree.add(new Student(825027001L, "a", 3.6));
-    assertThrows(IndexOutOfBoundsException.class, () -> studentTree.findElementByIndex(-1));
+    assertThrows(IndexOutOfBoundsException.class, () -> studentTree.get(-1));
   }
 
   @Test
   public void findStudentByIndexOutOfBounds() {
     Tree<Student> studentTree = new BTree<>(3);
     studentTree.add(new Student(825027001L, "a", 3.6));
-    assertThrows(IndexOutOfBoundsException.class, () -> studentTree.findElementByIndex(1));
+    assertThrows(IndexOutOfBoundsException.class, () -> studentTree.get(1));
   }
 }

@@ -11,7 +11,7 @@ public class SimpleBtreePrinter {
 
   @Test
   public void basicIntegerTest() {
-    BTree<Integer> integerValueTree = new BTree<>(3);
+    BTree<Integer> integerValueTree = new BTree<>(10);
     IntStream.range(0, 20).forEach(integerValueTree::add);
     integerValueTree.print(new DebuggingPrinter<>());
     assertEquals(20, integerValueTree.size());

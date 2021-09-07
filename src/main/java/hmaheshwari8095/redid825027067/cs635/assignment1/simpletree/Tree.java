@@ -21,7 +21,7 @@ public interface Tree<T extends Comparable<T>> {
    * @return element T if its found.
    * @throws IndexOutOfBoundsException if k is out of bounds.
    */
-  T findElementByIndex(int index) throws IndexOutOfBoundsException;
+  T get(int index) throws IndexOutOfBoundsException;
 
   /**
    * @return size of the tree i.e. the total no of elements in every node of the tree.
