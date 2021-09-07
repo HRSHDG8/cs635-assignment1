@@ -15,33 +15,33 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * A student is considered as probationary if his gpa is < 2.85
  */
 public class ProbationaryGPATest {
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
-    private final PrintStream originalErr = System.err;
+  private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+  private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+  private final PrintStream originalOut = System.out;
+  private final PrintStream originalErr = System.err;
 
-    @BeforeEach
-    public void setUpStreams() {
-        System.setOut(new PrintStream(outContent));
-        System.setErr(new PrintStream(errContent));
-    }
+  @BeforeEach
+  public void setUpStreams() {
+    System.setOut(new PrintStream(outContent));
+    System.setErr(new PrintStream(errContent));
+  }
 
-    @AfterEach
-    public void restoreStreams() {
-        System.setOut(originalOut);
-        System.setErr(originalErr);
-    }
+  @AfterEach
+  public void restoreStreams() {
+    System.setOut(originalOut);
+    System.setErr(originalErr);
+  }
 
-    @Test
-    public void gpaDefaultersTest() {
-        BTree tree = new BTree(3);
-        tree.add(new Student(825027001L, "a", 3.6));
-        tree.add(new Student(825027002L, "b", 3.3));
-        tree.add(new Student(825027003L, "c", 2.8));
-        tree.add(new Student(825027004L, "d", 3.1));
-        tree.add(new Student(825027005L, "e", 2.85));
-        tree.add(new Student(825027006L, "f", 2.84));
-        tree.print(new InOrderConditionalPrinter(Student::amIProbationary, Student::printRedId));
-        assertTrue(outContent.toString().contains("825027003"));
-    }
+  @Test
+  public void gpaDefaultersTest() {
+    BTree tree = new BTree(3);
+    tree.add(new Student(825027001L, "a", 3.6));
+    tree.add(new Student(825027002L, "b", 3.3));
+    tree.add(new Student(825027003L, "c", 2.8));
+    tree.add(new Student(825027004L, "d", 3.1));
+    tree.add(new Student(825027005L, "e", 2.85));
+    tree.add(new Student(825027006L, "f", 2.84));
+    tree.print(new InOrderConditionalPrinter(Student::amIProbationary, Student::printRedId));
+    assertTrue(outContent.toString().contains("825027003"));
+  }
 }
