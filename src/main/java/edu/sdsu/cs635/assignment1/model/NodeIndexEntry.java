@@ -3,8 +3,10 @@ package edu.sdsu.cs635.assignment1.model;
 import edu.sdsu.cs635.assignment1.simpletree.Node;
 
 /**
- * Simple class to encapsulate the current node under check and its index that needs a processing from.
- * This is pushed into stack to maintain a sequence of nodes the processing should happen from.
+ * Simple class to encapsulate the current node under check and its index
+ * that needs a processing from.
+ * This is pushed into stack to maintain a sequence of nodes the processing
+ * should happen from.
  */
 public class NodeIndexEntry {
     private final Node node;
