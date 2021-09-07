@@ -1,6 +1,9 @@
 ## CS635 Assignment 1
 
 >#### The goal of the project is to implement a bTree of order 3
+
+**The Project Functionalities can be checked from the test suites.**
+
 The project is structured as follows
 1. main - has the actual bTree and supporting code
    1. a collection package that holds FixedList.
