@@ -19,6 +19,7 @@ public class Node {
     private int noOfElementsInNode;
     private int noOfChildNodes;
 
+    // access is protected so it can only be accessed in the same sub package i.e. simpletree
     protected Node(Node parent, int order) {
         this.parent = parent;
         // the list is initialized with order and not order - 1, to accommodate the extra value that would be needed to process splitAndBalance

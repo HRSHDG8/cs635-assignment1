@@ -22,6 +22,8 @@ public class FixedList<T> extends ArrayList<T> {
     public FixedList(int initialCapacity) {
         super(initialCapacity);
         this.fixedSize = initialCapacity;
+        //initialize list with null values
+        //note it's important to use super classes add method for inserting null values.
         for (int i = 0; i < initialCapacity; i++) {
             super.add(null);
         }
@@ -38,6 +40,7 @@ public class FixedList<T> extends ArrayList<T> {
         int i = this.indexOf(null);
         checkIfOutOfBounds(i);
         if (i != -1) {
+            //override add with super classes set method that replaces rather than inserting new value
             super.set(i, element);
             return true;
         } else {
@@ -60,6 +63,7 @@ public class FixedList<T> extends ArrayList<T> {
     @Override
     public void add(int index, T element) {
         checkIfOutOfBounds(index);
+        //override add with super classes set method that replaces value at index rather than inserting new value
         super.set(index, element);
     }
 }
