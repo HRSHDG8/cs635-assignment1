@@ -1,6 +1,5 @@
 package hmaheshwari8095.redid825027067.cs635.assignment1.simpletree;
 
-import hmaheshwari8095.redid825027067.cs635.assignment1.model.NodeIndexEntry;
 import hmaheshwari8095.redid825027067.cs635.assignment1.printer.Printable;
 
 import java.util.Stack;
@@ -160,7 +159,10 @@ public class BTree<T extends Comparable<T>> implements Tree<T> {
    * @param childEndIndex the index upto which the child nodes must be split
    * @return a new node which can be attached to the parent.
    */
-  private Node<T> getNodeValuesAndChildrenInRange(Node<T> nodeToBeSplit, int startIndex, int valueEndIndex, int childEndIndex) {
+  private Node<T> getNodeValuesAndChildrenInRange(Node<T> nodeToBeSplit,
+                                                  int startIndex,
+                                                  int valueEndIndex,
+                                                  int childEndIndex) {
     Node<T> splitNode = new Node<>(null, order);
     for (int i = startIndex; i <= valueEndIndex; i++) {
       splitNode.addValue(nodeToBeSplit.valueAtIndex(i));

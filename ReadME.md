@@ -7,7 +7,7 @@
 The project is structured as follows
 1. main - has the actual bTree and supporting code
    1. a collection package that holds FixedList.
-   2. a model package that holds data objects and student class definition.
+   2. a model package that holds data objects like student class definition.
    3. printer package that has a base Printable interface and following implementation:
       1. DebuggingPrinter
       2. InOrderConditionalPrinter
