@@ -82,17 +82,17 @@ public class BTree implements Tree<Student> {
     }
 
     /**
-     * @param parentNode     current node under traversal.
+     * @param currentNode    current node under traversal.
      * @param valueToBeAdded the value that needs to be added to the tree.
      * @return true if a value was added in current node, else returns false.
      */
-    private boolean checkAndInsertInCurrentNode(Node parentNode, Student valueToBeAdded) {
-        if (parentNode.getNoOfChildNodes() == 0) {
-            parentNode.addValue(valueToBeAdded);
-            if (parentNode.getNoOfElementsInNode() <= maximumValuesInNode) {
+    private boolean checkAndInsertInCurrentNode(Node currentNode, Student valueToBeAdded) {
+        if (currentNode.getNoOfChildNodes() == 0) {
+            currentNode.addValue(valueToBeAdded);
+            if (currentNode.getNoOfElementsInNode() <= maximumValuesInNode) {
                 return true;
             }
-            splitAndBalance(parentNode);
+            splitAndBalance(currentNode);
             return true;
         }
         return false;
