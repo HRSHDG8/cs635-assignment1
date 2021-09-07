@@ -10,7 +10,7 @@ public class NodeIndexEntry<T extends Comparable<T>> {
   private final Node<T> node;
   private final int startIndex;
 
-  public NodeIndexEntry(Node<T> node, int startIndex) {
+  protected NodeIndexEntry(Node<T> node, int startIndex) {
     this.node = node;
     this.startIndex = startIndex;
   }
