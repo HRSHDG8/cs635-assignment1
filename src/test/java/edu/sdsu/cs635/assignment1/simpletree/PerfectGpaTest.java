@@ -31,14 +31,14 @@ public class PerfectGpaTest {
 
   @Test
   public void studentsWithPerfectGpa() {
-    BTree tree = new BTree(3);
-    tree.add(new Student(825027001L, "a", 4.00)); // prefect score
-    tree.add(new Student(825027002L, "b", 3.30));
-    tree.add(new Student(825027003L, "c", 2.80));
-    tree.add(new Student(825027004L, "d", 3.10));
-    tree.add(new Student(825027005L, "e", 4.00)); //perfect score
-    tree.add(new Student(825027006L, "f", 2.84));
-    tree.print(new ReverseOrderConditionalPrinter(Student::isPerfectScore, Student::printName));
+    BTree studentTree = new BTree(3);
+    studentTree.add(new Student(825027001L, "a", 4.00)); // prefect score
+    studentTree.add(new Student(825027002L, "b", 3.30));
+    studentTree.add(new Student(825027003L, "c", 2.80));
+    studentTree.add(new Student(825027004L, "d", 3.10));
+    studentTree.add(new Student(825027005L, "e", 4.00)); //perfect score
+    studentTree.add(new Student(825027006L, "f", 2.84));
+    studentTree.print(new ReverseOrderConditionalPrinter(Student::isPerfectScore, Student::printName));
     assertTrue(outContent.toString().contains("e") && outContent.toString().contains("a"));
   }
 }

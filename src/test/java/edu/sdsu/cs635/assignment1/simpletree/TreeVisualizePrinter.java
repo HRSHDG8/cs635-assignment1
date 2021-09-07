@@ -34,20 +34,20 @@ public class TreeVisualizePrinter {
 
   @Test
   public void printTree() {
-    BTree tree = new BTree(3);
+    BTree studentTree = new BTree(3);
     ThreadLocalRandom gpaGenerator = ThreadLocalRandom.current();
     IntStream.range(0, 10).forEach(value -> {
       double gpa = gpaGenerator.nextDouble(2.5, 4.0);
-      tree.add(new Student(823000000L + value, "" + value, gpa));
+      studentTree.add(new Student(823000000L + value, "" + value, gpa));
     });
-    tree.print(new DebuggingPrinter());
+    studentTree.print(new DebuggingPrinter());
     assertTrue(outContent.toString().contains("823000003"));
   }
 
   @Test
   public void printEmptyTree() {
-    BTree tree = new BTree(3);
-    tree.print(new DebuggingPrinter());
+    BTree studentTree = new BTree(3);
+    studentTree.print(new DebuggingPrinter());
     assertTrue(outContent.toString().contains("Tree is empty"));
   }
 

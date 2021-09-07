@@ -20,43 +20,43 @@ public class FindElementInTreeTest {
 
   @Test
   public void findStudentByIndexBoundaryConditionLowerBound() {
-    BTree tree = new BTree(3);
-    tree.add(new Student(825027001L, "a", 3.6));
-    tree.add(new Student(825027001L, "b", 3.3));
-    tree.add(new Student(825027001L, "d", 3.8));
-    tree.add(new Student(825027001L, "c", 3.1));
-    Student third = tree.findElementByIndex(0);
+    BTree studentTree = new BTree(3);
+    studentTree.add(new Student(825027001L, "a", 3.6));
+    studentTree.add(new Student(825027001L, "b", 3.3));
+    studentTree.add(new Student(825027001L, "d", 3.8));
+    studentTree.add(new Student(825027001L, "c", 3.1));
+    Student third = studentTree.findElementByIndex(0);
     assertEquals("a", third.getName());
   }
 
   @Test
   public void findStudentByIndexBoundaryConditionHigherBound() {
-    BTree tree = new BTree(3);
-    tree.add(new Student(825027001L, "a", 3.6));
-    tree.add(new Student(825027001L, "b", 3.3));
-    tree.add(new Student(825027001L, "d", 3.8));
-    tree.add(new Student(825027001L, "c", 3.1));
-    Student third = tree.findElementByIndex(3);
+    BTree studentTree = new BTree(3);
+    studentTree.add(new Student(825027001L, "a", 3.6));
+    studentTree.add(new Student(825027001L, "b", 3.3));
+    studentTree.add(new Student(825027001L, "d", 3.8));
+    studentTree.add(new Student(825027001L, "c", 3.1));
+    Student third = studentTree.findElementByIndex(3);
     assertEquals("d", third.getName());
   }
 
   @Test
   public void findStudentByIndexWhenTreeIsEmpty() {
-    BTree tree = new BTree(3);
-    assertThrows(IndexOutOfBoundsException.class, () -> tree.findElementByIndex(1));
+    BTree studentTree = new BTree(3);
+    assertThrows(IndexOutOfBoundsException.class, () -> studentTree.findElementByIndex(1));
   }
 
   @Test
   public void findStudentByIndexNegativeIndex() {
-    BTree tree = new BTree(3);
-    tree.add(new Student(825027001L, "a", 3.6));
-    assertThrows(IndexOutOfBoundsException.class, () -> tree.findElementByIndex(-1));
+    BTree studentTree = new BTree(3);
+    studentTree.add(new Student(825027001L, "a", 3.6));
+    assertThrows(IndexOutOfBoundsException.class, () -> studentTree.findElementByIndex(-1));
   }
 
   @Test
   public void findStudentByIndexOutOfBounds() {
-    BTree tree = new BTree(3);
-    tree.add(new Student(825027001L, "a", 3.6));
-    assertThrows(IndexOutOfBoundsException.class, () -> tree.findElementByIndex(1));
+    BTree studentTree = new BTree(3);
+    studentTree.add(new Student(825027001L, "a", 3.6));
+    assertThrows(IndexOutOfBoundsException.class, () -> studentTree.findElementByIndex(1));
   }
 }
