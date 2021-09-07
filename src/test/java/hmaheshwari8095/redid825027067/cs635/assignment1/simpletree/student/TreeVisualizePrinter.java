@@ -1,7 +1,9 @@
-package hmaheshwari8095.redid825027067.cs635.assignment1.simpletree;
+package hmaheshwari8095.redid825027067.cs635.assignment1.simpletree.student;
 
 import hmaheshwari8095.redid825027067.cs635.assignment1.model.Student;
 import hmaheshwari8095.redid825027067.cs635.assignment1.printer.DebuggingPrinter;
+import hmaheshwari8095.redid825027067.cs635.assignment1.simpletree.BTree;
+import hmaheshwari8095.redid825027067.cs635.assignment1.simpletree.Tree;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +36,7 @@ public class TreeVisualizePrinter {
 
   @Test
   public void printTree() {
-    BTree studentTree = new BTree(3);
+    Tree<Student> studentTree = new BTree<>(3);
     ThreadLocalRandom gpaGenerator = ThreadLocalRandom.current();
     IntStream.range(0, 10).forEach(value -> {
       double gpa = gpaGenerator.nextDouble(2.5, 4.0);
@@ -46,7 +48,7 @@ public class TreeVisualizePrinter {
 
   @Test
   public void printEmptyTree() {
-    BTree studentTree = new BTree(3);
+    Tree<Student> studentTree = new BTree<>(3);
     studentTree.print(new DebuggingPrinter());
     assertTrue(outContent.toString().contains("Tree is empty"));
   }
@@ -54,7 +56,7 @@ public class TreeVisualizePrinter {
   @AfterAll
   //only to debug to  after the console output stream is restored.
   public static void destroy() {
-    BTree tree = new BTree(3);
+    Tree<Student> tree = new BTree<>(3);
     ThreadLocalRandom gpaGenerator = ThreadLocalRandom.current();
     IntStream.range(0, 10).forEach(value -> {
       double gpa = gpaGenerator.nextDouble(2.5, 4.0);

@@ -3,7 +3,9 @@ package hmaheshwari8095.redid825027067.cs635.assignment1.model;
 /**
  * Student class holds vital information pertaining to a student.
  * This class extends Comparable to give a custom implementation to compare
- * Student objects by their name in lexicographical order
+ * Student objects by their name in lexicographical order.
+ * Implementing Comparable also gives an abstraction so that Student can be
+ * added in tree
  */
 public class Student implements Comparable<Student> {
   private final Long redId;

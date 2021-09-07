@@ -1,7 +1,6 @@
 package hmaheshwari8095.redid825027067.cs635.assignment1.simpletree;
 
 import hmaheshwari8095.redid825027067.cs635.assignment1.collection.FixedList;
-import hmaheshwari8095.redid825027067.cs635.assignment1.model.Student;
 
 import java.util.Comparator;
 import java.util.List;
@@ -12,17 +11,16 @@ import java.util.List;
  * A list of values it currently holds, and its count
  * A list of pointers to the child nodes, and its count
  */
-public class Node {
-  private Node parent;
-  private final List<Student> values;
-  private final List<Node> children;
+public class Node<T extends Comparable<T>> {
+  private Node<T> parent;
+  private final List<T> values;
+  private final List<Node<T>> children;
   private int noOfElementsInNode;
   private int noOfChildNodes;
-  private Comparator<Node> childNodeComparator;
+  private final Comparator<Node<T>> childNodeComparator;
 
-  // access is protected, so that it can only be accessed in the same sub package
-  // i.e. "edu.sdsu.cs635.assignment1.simpletree"
-  protected Node(Node parent, int order) {
+  // access is protected, so that it can only be accessed in the same sub package\
+  protected Node(Node<T> parent, int order) {
     this.parent = parent;
     // the list is initialized with order and not order - 1, to accommodate the extra value that would be needed to process splitAndBalance
     // only order - 1 element will be present in the node
@@ -37,14 +35,14 @@ public class Node {
   /**
    * @return parent of the current node
    */
-  public Node getParent() {
+  public Node<T> getParent() {
     return parent;
   }
 
   /**
    * @param parent sets a parent node to the current node
    */
-  public void setParent(Node parent) {
+  public void setParent(Node<T> parent) {
     this.parent = parent;
   }
 
@@ -71,19 +69,19 @@ public class Node {
 
   /**
    * @param index integer value to retrieve value from
-   * @return a Student at index in the current node.
+   * @return a {@link T} at index in the current node.
    */
-  public Student valueAtIndex(int index) {
+  public T valueAtIndex(int index) {
     return values.get(index);
   }
 
   /**
-   * adds {@link Student} objects to "values" List, increments the noOfElementsInNode
+   * adds {@link T} objects to "values" List, increments the noOfElementsInNode
    * and sorts them in lexicographical order keeping nulls at last
    *
-   * @param value a {@link Student} object to be added to the current node
+   * @param value a {@link T} object to be added to the current node
    */
-  public void addValue(Student value) {
+  public void addValue(T value) {
     values.add(noOfElementsInNode++, value);
     values.sort(Comparator.nullsLast(Comparator.naturalOrder()));
   }
@@ -92,17 +90,17 @@ public class Node {
    * @param index int value to retrieve node from
    * @return a child node at index
    */
-  public Node getChildAtIndex(int index) {
+  public Node<T> getChildAtIndex(int index) {
     return children.get(index);
   }
 
   /**
    * adds a {@link Node} to children List, increments the noOfChildNodes
-   * and sorts the students in lexicographical order keeping nulls at last
+   * and sorts the T object in the comparable order keeping nulls at last
    *
    * @param child a child {@link Node} to be added to the current node
    */
-  public void addChild(Node child) {
+  public void addChild(Node<T> child) {
     child.parent = this;
     children.add(noOfChildNodes++, child);
     children.sort(childNodeComparator);
@@ -111,7 +109,7 @@ public class Node {
   /**
    * @param child removes child {@link Node}, within the current node only, after spilt and balance happens
    */
-  public void removeChild(Node child) {
+  public void removeChild(Node<T> child) {
     boolean childNodeFound = false;
     if (noOfChildNodes == 0) {
       return;

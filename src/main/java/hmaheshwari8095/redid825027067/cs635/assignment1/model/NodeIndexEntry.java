@@ -8,16 +8,16 @@ import hmaheshwari8095.redid825027067.cs635.assignment1.simpletree.Node;
  * This is pushed into stack to maintain a sequence of nodes the processing
  * should happen from.
  */
-public class NodeIndexEntry {
-    private final Node node;
+public class NodeIndexEntry<T extends Comparable<T>> {
+    private final Node<T> node;
     private final int startIndex;
 
-    public NodeIndexEntry(Node node, int startIndex) {
+    public NodeIndexEntry(Node<T> node, int startIndex) {
         this.node = node;
         this.startIndex = startIndex;
     }
 
-    public Node getNode() {
+    public Node<T> getNode() {
         return node;
     }
 

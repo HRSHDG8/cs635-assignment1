@@ -16,8 +16,10 @@ The project is structured as follows
 2. test
    1. A test suite in collection package to test the FixedListClass and its behavior.
    2. Following Test suite in simpletree package:
-      1. FindElementByIndexInTreeTest: tests the functionality to find kth element in the tree in lexicographic order
-      2. PrefectGpaTest: test logic to print students with prefect GPA.
-      3. ProbationaryGPATest: test the logic to print students with gpa less than 2.85.
-      4. TreeCreationTest: test the logic of Btree creation and Student insertion.
-      5. TreeVisualizePrinter: test the logic of DebugPrinter and visually see the tree contents.
+      1. student:
+         1. FindElementByIndexInTreeTest: tests the functionality to find kth element in the tree in lexicographic order
+         2. PrefectGpaTest: test logic to print students with prefect GPA.
+         3. ProbationaryGPATest: test the logic to print students with gpa less than 2.85.
+         4. TreeCreationTest: test the logic of Btree creation and Student insertion.
+         5. TreeVisualizePrinter: test the logic of DebugPrinter and visually see the tree contents.
+      2. SimpleBtreePrinter: Creates and prints Btree with Integer class.

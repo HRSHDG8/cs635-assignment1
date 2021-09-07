@@ -1,6 +1,5 @@
 package hmaheshwari8095.redid825027067.cs635.assignment1.printer;
 
-import hmaheshwari8095.redid825027067.cs635.assignment1.model.Student;
 import hmaheshwari8095.redid825027067.cs635.assignment1.simpletree.Node;
 
 import java.util.function.Consumer;
@@ -11,19 +10,19 @@ import java.util.function.Predicate;
  * A predicate to test a node value
  * A consumer that is applied if the respective predicate holds true.
  */
-public class ReverseOrderConditionalPrinter implements Printable<Node> {
+public class ReverseOrderConditionalPrinter<T extends Comparable<T>> implements Printable<Node<T>> {
 
-  private final Predicate<Student> testCondition;
-  private final Consumer<Student> studentPrintValue;
+  private final Predicate<T> testCondition;
+  private final Consumer<T> dynamicAcceptor;
 
-  public ReverseOrderConditionalPrinter(Predicate<Student> testCondition,
-                                        Consumer<Student> studentPrintValue) {
+  public ReverseOrderConditionalPrinter(Predicate<T> testCondition,
+                                        Consumer<T> dynamicAcceptor) {
     this.testCondition = testCondition;
-    this.studentPrintValue = studentPrintValue;
+    this.dynamicAcceptor = dynamicAcceptor;
   }
 
   @Override
-  public void print(Node treeNodeToBePrinted) {
+  public void print(Node<T> treeNodeToBePrinted) {
     reverseOrder(treeNodeToBePrinted);
   }
 
@@ -33,25 +32,25 @@ public class ReverseOrderConditionalPrinter implements Printable<Node> {
    * @param currentNode the node under recursion to call the
    *                    reverseOrder logic on
    */
-  private void reverseOrder(Node currentNode) {
+  private void reverseOrder(Node<T> currentNode) {
     for (int i = currentNode.getNoOfElementsInNode() - 1; i >= 0; i--) {
       //start from the right most child until you reach the leaf node.
-      Node child = currentNode.getChildAtIndex(i + 1);
+      Node<T> child = currentNode.getChildAtIndex(i + 1);
       if (child != null) {
         reverseOrder(child);
       }
       //once you reach the leaf check predicate and accept the print
-      //function on currentStudent
-      Student currentStudent = currentNode.valueAtIndex(i);
-      if (testCondition.test(currentStudent)) {
-        studentPrintValue.accept(currentStudent);
+      //function on currentValue
+      T currentValue = currentNode.valueAtIndex(i);
+      if (testCondition.test(currentValue)) {
+        dynamicAcceptor.accept(currentValue);
       }
 
     }
     //for every non leaf node, call reverseOrder for the first Child Node
     //of the current Node
     if (currentNode.getNoOfChildNodes() != 0) {
-      Node firstNode = currentNode.getChildAtIndex(0);
+      Node<T> firstNode = currentNode.getChildAtIndex(0);
       if (firstNode != null) {
         reverseOrder(firstNode);
       }

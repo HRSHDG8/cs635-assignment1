@@ -5,7 +5,7 @@ import hmaheshwari8095.redid825027067.cs635.assignment1.printer.Printable;
 /**
  * @param <T> Create a tree of type T
  */
-public interface Tree<T> {
+public interface Tree<T extends Comparable<T>> {
   /**
    * @param value adds a value of type T to the Tree.
    */
@@ -14,7 +14,7 @@ public interface Tree<T> {
   /**
    * @param printable a custom implementation of the Printable interface.
    */
-  void print(Printable<Node> printable);
+  void print(Printable<Node<T>> printable);
 
   /**
    * @param index the index (kth) element in the tree.
