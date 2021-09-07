@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class FindElementInTreeTest {
+public class FindElementByIndexInTreeTest {
   @Test
   public void findStudentByIndexWhenIndexIsWithinBounds() {
     BTree tree = new BTree(3);
