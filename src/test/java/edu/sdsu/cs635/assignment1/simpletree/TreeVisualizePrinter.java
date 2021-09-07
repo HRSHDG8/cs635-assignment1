@@ -2,6 +2,7 @@ package edu.sdsu.cs635.assignment1.simpletree;
 
 import edu.sdsu.cs635.assignment1.model.Student;
 import edu.sdsu.cs635.assignment1.printer.DebuggingPrinter;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,5 +49,17 @@ public class TreeVisualizePrinter {
         BTree tree = new BTree(3);
         tree.print(new DebuggingPrinter());
         assertTrue(outContent.toString().contains("Tree is empty"));
+    }
+
+    @AfterAll
+    //only to debug to  after the console output stream is restored.
+    public static void destroy() {
+        BTree tree = new BTree(3);
+        ThreadLocalRandom gpaGenerator = ThreadLocalRandom.current();
+        IntStream.range(0, 10).forEach(value -> {
+            double gpa = gpaGenerator.nextDouble(2.5, 4.0);
+            tree.add(new Student(823000000L + value, "" + value, gpa));
+        });
+        tree.print(new DebuggingPrinter());
     }
 }
