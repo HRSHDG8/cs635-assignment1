@@ -19,7 +19,8 @@ public class Node {
     private int noOfElementsInNode;
     private int noOfChildNodes;
 
-    // access is protected so it can only be accessed in the same sub package i.e. simpletree
+    // access is protected, so that it can only be accessed in the same sub package
+    // i.e. "edu.sdsu.cs635.assignment1.simpletree"
     protected Node(Node parent, int order) {
         this.parent = parent;
         // the list is initialized with order and not order - 1, to accommodate the extra value that would be needed to process splitAndBalance
@@ -74,7 +75,8 @@ public class Node {
     }
 
     /**
-     * adds and sorts the students in lexicographical order keeping nulls at last
+     * adds {@link Student} objects to "values" List, increments the noOfElementsInNode
+     * and sorts them in lexicographical order keeping nulls at last
      *
      * @param value a {@link Student} object to be added to the current node
      */
@@ -84,7 +86,7 @@ public class Node {
     }
 
     /**
-     * @param index integer value to retrieve node from
+     * @param index int value to retrieve node from
      * @return a child node at index
      */
     public Node getChildAtIndex(int index) {
@@ -92,7 +94,8 @@ public class Node {
     }
 
     /**
-     * adds and sorts the students in lexicographical order keeping nulls at last
+     * adds a {@link Node} to children List, increments the noOfChildNodes
+     * and sorts the students in lexicographical order keeping nulls at last
      *
      * @param child a child {@link Node} to be added to the current node
      */
@@ -104,7 +107,7 @@ public class Node {
     }
 
     /**
-     * @param child removes child node, within the current node only, after spilt and balance happens
+     * @param child removes child {@link Node}, within the current node only, after spilt and balance happens
      */
     public void removeChild(Node child) {
         boolean childNodeFound = false;
