@@ -1,7 +1,7 @@
 package edu.sdsu.cs635.assignment1.simpletree;
 
 import edu.sdsu.cs635.assignment1.model.Student;
-import edu.sdsu.cs635.assignment1.printer.PostOrderConditionalPrinter;
+import edu.sdsu.cs635.assignment1.printer.ReverseOrderConditionalPrinter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ public class PrintStudentName {
         tree.add(new Student(825027004L, "d", 3.10));
         tree.add(new Student(825027005L, "e", 4.00)); //perfect score
         tree.add(new Student(825027006L, "f", 2.84));
-        tree.print(new PostOrderConditionalPrinter(Student::isPerfectScore, Student::printName));
+        tree.print(new ReverseOrderConditionalPrinter(Student::isPerfectScore, Student::printName));
         assertTrue(outContent.toString().contains("e") && outContent.toString().contains("a"));
     }
 }

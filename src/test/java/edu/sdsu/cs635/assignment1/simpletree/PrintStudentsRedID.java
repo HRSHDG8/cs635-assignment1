@@ -1,7 +1,7 @@
 package edu.sdsu.cs635.assignment1.simpletree;
 
 import edu.sdsu.cs635.assignment1.model.Student;
-import edu.sdsu.cs635.assignment1.printer.PreOrderConditionalPrinter;
+import edu.sdsu.cs635.assignment1.printer.InOrderConditionalPrinter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ public class PrintStudentsRedID {
         tree.add(new Student(825027004L, "d", 3.1));
         tree.add(new Student(825027005L, "e", 2.85));
         tree.add(new Student(825027006L, "f", 2.84));
-        tree.print(new PreOrderConditionalPrinter(Student::amIProbationary, Student::printRedId));
+        tree.print(new InOrderConditionalPrinter(Student::amIProbationary, Student::printRedId));
         assertTrue(outContent.toString().contains("825027003"));
     }
 }

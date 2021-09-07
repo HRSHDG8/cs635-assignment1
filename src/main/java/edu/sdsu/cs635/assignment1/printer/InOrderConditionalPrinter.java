@@ -11,42 +11,44 @@ import java.util.function.Predicate;
  * A predicate to test a node value
  * A consumer that would be applied if the above predicate holds true.
  */
-public class PreOrderConditionalPrinter implements Printable<Node> {
+public class InOrderConditionalPrinter implements Printable<Node> {
     private final Predicate<Student> testCondition;
     private final Consumer<Student> studentPrintValue;
 
-    public PreOrderConditionalPrinter(Predicate<Student> testCondition, Consumer<Student> studentPrintValue) {
+    public InOrderConditionalPrinter(Predicate<Student> testCondition, Consumer<Student> studentPrintValue) {
         this.testCondition = testCondition;
         this.studentPrintValue = studentPrintValue;
     }
 
     @Override
     public void print(Node treeNodeToBePrinted) {
-        preOrder(treeNodeToBePrinted);
+        inOrder(treeNodeToBePrinted);
     }
 
     /**
-     * Recursively calls preOrder until end of tree
+     * Recursively calls inOrder until end of tree
      *
-     * @param currentNode the node under recursion to act the preOrder logic on
+     * @param currentNode the node under recursion to act the inOrder logic on
      */
-    private void preOrder(Node currentNode) {
+    private void inOrder(Node currentNode) {
         for (int i = 0; i < currentNode.getNoOfElementsInNode(); i++) {
+            //start from the left most child until you reach the leaf node.
             Node child = currentNode.getChildAtIndex(i);
             if (child != null) {
-                preOrder(child);
+                inOrder(child);
             }
-            Student s = currentNode.valueAtIndex(i);
-            if (testCondition.test(s)) {
-                studentPrintValue.accept(s);
+            //once you reach the leaf check predicate and accept the print function on currentStudent
+            Student currentStudent = currentNode.valueAtIndex(i);
+            if (testCondition.test(currentStudent)) {
+                studentPrintValue.accept(currentStudent);
             }
 
         }
+        //for every non leaf node, call inOrder for the last Child Node of the current Node
         if (currentNode.getNoOfChildNodes() != 0) {
             Node lastNode = currentNode.getChildAtIndex(currentNode.getNoOfChildNodes() - 1);
-
             if (lastNode != null) {
-                preOrder(lastNode);
+                inOrder(lastNode);
             }
         }
     }
