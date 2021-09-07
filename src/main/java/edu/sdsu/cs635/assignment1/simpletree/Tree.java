@@ -3,7 +3,6 @@ package edu.sdsu.cs635.assignment1.simpletree;
 import edu.sdsu.cs635.assignment1.printer.Printable;
 
 /**
- *
  * @param <T> Create a tree of type T
  */
 public interface Tree<T> {
@@ -19,12 +18,12 @@ public interface Tree<T> {
 
     /**
      * @param index the index (kth) element in the tree.
-     * @return element T if its found else throw index out of bound.
+     * @return element T if its found.
+     * @throws IndexOutOfBoundsException if k is out of bounds.
      */
-    T findElementByIndex(int index);
+    T findElementByIndex(int index) throws IndexOutOfBoundsException;
 
     /**
-     *
      * @return size of the tree i.e. the total no of elements in every node of the tree.
      */
     int size();

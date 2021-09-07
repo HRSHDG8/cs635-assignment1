@@ -193,7 +193,7 @@ public class BTree implements Tree<Student> {
      * @return the student found at index, if out of bounds throws {@link IndexOutOfBoundsException}
      */
     @Override
-    public Student findElementByIndex(int index) {
+    public Student findElementByIndex(int index) throws IndexOutOfBoundsException {
         if (!isIndexOutOfBound(index)) {
             int currentTraversalIndex = -1;
             // Create a stack to maintain the current node under traversal and the index to start traversing the value from.
