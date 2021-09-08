@@ -3,7 +3,7 @@ package hmaheshwari8095.redid825027067.cs635.assignment1.simpletree;
 import hmaheshwari8095.redid825027067.cs635.assignment1.printer.Printable;
 
 /**
- * @param <T> Create a tree of type T
+ * @param <T> Interface outlining a tree of comparable objects
  */
 public interface Tree<T extends Comparable<T>> {
   /**
