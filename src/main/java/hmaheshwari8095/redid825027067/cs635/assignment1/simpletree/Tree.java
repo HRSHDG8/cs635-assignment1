@@ -24,7 +24,7 @@ public interface Tree<T extends Comparable<T>> {
   T get(int index) throws IndexOutOfBoundsException;
 
   /**
-   * @return size of the tree i.e. the total no of elements in every node of the tree.
+   * @return size of the tree i.e. the total no of values in every node of the tree.
    */
   int size();
 }
