@@ -1,9 +1,7 @@
 package hmaheshwari8095.redid825027067.cs635.assignment1.simpletree;
 
-import hmaheshwari8095.redid825027067.cs635.assignment1.collection.FixedList;
-
+import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 
 /**
  * A node for the {@link BTree} class
@@ -13,19 +11,20 @@ import java.util.List;
  */
 public class Node<T extends Comparable<T>> {
   private Node<T> parent;
-  private final List<T> values;
-  private final List<Node<T>> children;
+  private final T[] values;
+  private final Node<T>[] children;
   private int noOfElementsInNode;
   private int noOfChildNodes;
   private final Comparator<Node<T>> childNodeComparator;
 
   // access is protected, so that it can only be accessed in the same sub package\
+  @SuppressWarnings("unchecked")
   protected Node(Node<T> parent, int order) {
     this.parent = parent;
     // the list is initialized with order and not order - 1, to accommodate the extra value that would be needed to process splitAndBalance
     // only order - 1 element will be present in the node
-    this.values = new FixedList<>(order);
-    this.children = new FixedList<>(order + 1);
+    this.values = (T[]) new Comparable[order];
+    this.children = new Node[order + 1];
     this.noOfElementsInNode = 0;
     this.noOfChildNodes = 0;
     //sort child nodes by the comparable value of first element of each child node
@@ -55,15 +54,15 @@ public class Node<T extends Comparable<T>> {
     System.out.print(prefix);
     for (int i = 0; i < this.noOfElementsInNode; i++) {
       if (i != this.noOfElementsInNode - 1) {
-        System.out.print(" | " + values.get(i));
+        System.out.print(" | " + values[i]);
       } else {
-        System.out.print(" | " + values.get(i) + " | ");
+        System.out.print(" | " + values[i] + " | ");
       }
     }
     System.out.println();
     for (int i = 0; i < this.noOfChildNodes; i++) {
       //add tab for each level going down
-      children.get(i).print(prefix + "\t");
+      children[i].print(prefix + "\t");
     }
   }
 
@@ -72,7 +71,7 @@ public class Node<T extends Comparable<T>> {
    * @return a {@link T} at index in the current node.
    */
   public T valueAtIndex(int index) {
-    return values.get(index);
+    return values[index];
   }
 
   /**
@@ -82,8 +81,8 @@ public class Node<T extends Comparable<T>> {
    * @param value a {@link T} object to be added to the current node
    */
   public void addValue(T value) {
-    values.add(noOfElementsInNode++, value);
-    values.sort(Comparator.nullsLast(Comparator.naturalOrder()));
+    values[noOfElementsInNode++] = value;
+    Arrays.sort(values, Comparator.nullsLast(Comparator.naturalOrder()));
   }
 
   /**
@@ -91,7 +90,7 @@ public class Node<T extends Comparable<T>> {
    * @return a child node at index
    */
   public Node<T> getChildAtIndex(int index) {
-    return children.get(index);
+    return children[index];
   }
 
   /**
@@ -102,8 +101,8 @@ public class Node<T extends Comparable<T>> {
    */
   public void addChild(Node<T> child) {
     child.parent = this;
-    children.add(noOfChildNodes++, child);
-    children.sort(childNodeComparator);
+    children[noOfChildNodes++] = child;
+    Arrays.sort(children, childNodeComparator);
   }
 
   /**
@@ -115,14 +114,14 @@ public class Node<T extends Comparable<T>> {
       return;
     }
     for (int i = 0; i < noOfChildNodes; i++) {
-      if (children.get(i).equals(child)) {
+      if (children[i].equals(child)) {
         childNodeFound = true;
       } else if (childNodeFound) {
-        children.add(i - 1, children.get(i));
+        children[i - 1] = children[i];
       }
     }
     if (childNodeFound) {
-      children.add(--noOfChildNodes, null);
+      children[--noOfChildNodes] = null;
     }
   }
 
