@@ -73,8 +73,7 @@ public class BTree<E> implements Collection<E> {
     increaseSize();
     //base condition to insert the very first value
     if (isNull(root)) {
-      root = new BTreeNode(null);
-      root.add(value);
+      root = new BTreeNode(null, value);
     } else {
       BTreeNode currentBTreeNode = root;
       while (!isNull(currentBTreeNode)) {
@@ -106,10 +105,7 @@ public class BTree<E> implements Collection<E> {
   }
 
   private BTreeNode navigateRight(BTreeNode bTreeNode, E value) {
-        /*
-        For BTree the highest possible value in a node is the last value
-        And the highest possible child node is the right most node
-        */
+    //For BTree the highest possible value in a node is the last value and the highest possible child node is the right most node
     int indexOfLastElement = bTreeNode.size() - 1;
     BTreeNode rightBTreeNode = null;
     E highestComparableValue = bTreeNode.get(indexOfLastElement);
@@ -120,10 +116,9 @@ public class BTree<E> implements Collection<E> {
   }
 
   private BTreeNode navigateLeft(BTreeNode bTreeNode, E value) {
-        /*
-        For BTree the lowest possible value in a node is the first value
-        And the lowest possible child node is the left most node
-        */
+
+    //For BTree the lowest possible value in a node is the first value and the lowest possible child node is the left most node
+
     E lowestComparableValue = bTreeNode.get(0);
     BTreeNode leftBTreeNode = null;
     if (valueComparator.compare(value, lowestComparableValue) <= 0) {
@@ -401,6 +396,11 @@ public class BTree<E> implements Collection<E> {
     private int childrenSize;
 
     // access is protected, so that it can only be accessed in the same sub package
+    private BTreeNode(BTreeNode parent, E value) {
+      this(parent);
+      this.add(value);
+    }
+
     private BTreeNode(BTreeNode parent) {
       this.parent = parent;
       // the list is initialized with order and not order - 1, to accommodate the extra value that would be needed to process splitAndBalance
