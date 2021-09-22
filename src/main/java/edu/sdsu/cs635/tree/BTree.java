@@ -372,11 +372,11 @@ public class BTree<E> implements Collection<E> {
           if (currentIndex < currentNode.size() - 1) {
             value = currentNode.get(currentIndex + 1);
           }
-          if (currentIndex >= currentNode.size()) {
+          if (currentIndex >= 0) {
             recursionStack.push(new NodeIndexEntry(currentNode, currentIndex - 1));
           }
-          BTreeNode child = currentNode.getChild(currentIndex);
-          recursionStack.push(new NodeIndexEntry(child, currentNode.childrenSize() - 1));
+          BTreeNode child = currentNode.getChild(currentIndex + 1);
+          recursionStack.push(new NodeIndexEntry(child, child.size() - 1));
           if (value != null) {
             cursor--;
             return value;
