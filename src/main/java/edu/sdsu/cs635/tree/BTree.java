@@ -261,8 +261,8 @@ public class BTree<E> implements Collection<E> {
     root = null;
   }
 
-  private boolean isNull(BTreeNode BTreeNode) {
-    return BTreeNode == null;
+  private boolean isNull(BTreeNode node) {
+    return node == null;
   }
 
   abstract class TreeIterator implements Iterator<E> {
@@ -270,7 +270,7 @@ public class BTree<E> implements Collection<E> {
     int expectedModCount;
     Stack<NodeIndexEntry> recursionStack;
 
-    final void checkForComodification() {
+    final void checkForCoModification() {
       if (size != expectedModCount)
         throw new ConcurrentModificationException();
     }
@@ -304,7 +304,7 @@ public class BTree<E> implements Collection<E> {
 
     @Override
     public E next() {
-      checkForComodification();
+      checkForCoModification();
       while (!recursionStack.isEmpty()) {
         NodeIndexEntry entry = recursionStack.pop();
         BTreeNode currentNode = entry.node;
@@ -354,7 +354,7 @@ public class BTree<E> implements Collection<E> {
 
     @Override
     public E next() {
-      checkForComodification();
+      checkForCoModification();
       while (!recursionStack.isEmpty()) {
         NodeIndexEntry entry = recursionStack.pop();
         BTreeNode currentNode = entry.node;
