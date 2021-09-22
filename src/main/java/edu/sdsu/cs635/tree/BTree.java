@@ -105,29 +105,29 @@ public class BTree<E> implements Collection<E> {
     }
   }
 
-  private BTreeNode navigateRight(BTreeNode BTreeNode, E value) {
+  private BTreeNode navigateRight(BTreeNode bTreeNode, E value) {
         /*
         For BTree the highest possible value in a node is the last value
         And the highest possible child node is the right most node
         */
-    int indexOfLastElement = BTreeNode.size() - 1;
+    int indexOfLastElement = bTreeNode.size() - 1;
     BTreeNode rightBTreeNode = null;
-    E highestComparableValue = BTreeNode.get(indexOfLastElement);
+    E highestComparableValue = bTreeNode.get(indexOfLastElement);
     if (valueComparator.compare(value, highestComparableValue) > 0) {
-      rightBTreeNode = BTreeNode.getChild(BTreeNode.size());
+      rightBTreeNode = bTreeNode.getChild(bTreeNode.size());
     }
     return rightBTreeNode;
   }
 
-  private BTreeNode navigateLeft(BTreeNode BTreeNode, E value) {
+  private BTreeNode navigateLeft(BTreeNode bTreeNode, E value) {
         /*
         For BTree the lowest possible value in a node is the first value
         And the lowest possible child node is the left most node
         */
-    E lowestComparableValue = BTreeNode.get(0);
+    E lowestComparableValue = bTreeNode.get(0);
     BTreeNode leftBTreeNode = null;
     if (valueComparator.compare(value, lowestComparableValue) <= 0) {
-      leftBTreeNode = BTreeNode.getChild(0);
+      leftBTreeNode = bTreeNode.getChild(0);
     }
     return leftBTreeNode;
   }
@@ -336,7 +336,6 @@ public class BTree<E> implements Collection<E> {
     }
   }
 
-  // TODO Test this out and revisit entire logic coz you suck bro;
   class ReverseOrderTreeIterator extends TreeIterator {
 
     public ReverseOrderTreeIterator() {
