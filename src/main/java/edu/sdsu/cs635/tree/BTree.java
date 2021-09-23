@@ -60,7 +60,13 @@ public class BTree<E> implements Collection<E> {
 
   @Override
   public Object[] toArray() {
-    return new Object[0];
+    Object[] array = new Object[size];
+    int i = 0;
+    for (E e : this) {
+      array[i++] = e;
+    }
+    // makes sure a deep clone is returned so a change to array does not change the tree.
+    return Arrays.copyOf(array, size);
   }
 
   @Override
@@ -104,53 +110,51 @@ public class BTree<E> implements Collection<E> {
     }
   }
 
-  private BTreeNode navigateRight(BTreeNode bTreeNode, E value) {
+  private BTreeNode navigateRight(BTreeNode node, E value) {
     //For BTree the highest possible value in a node is the last value and the highest possible child node is the right most node
-    int indexOfLastElement = bTreeNode.size() - 1;
+    int indexOfLastElement = node.size() - 1;
     BTreeNode rightBTreeNode = null;
-    E highestComparableValue = bTreeNode.get(indexOfLastElement);
+    E highestComparableValue = node.get(indexOfLastElement);
     if (valueComparator.compare(value, highestComparableValue) > 0) {
-      rightBTreeNode = bTreeNode.getChild(bTreeNode.size());
+      rightBTreeNode = node.getChild(node.size());
     }
     return rightBTreeNode;
   }
 
-  private BTreeNode navigateLeft(BTreeNode bTreeNode, E value) {
-
+  private BTreeNode navigateLeft(BTreeNode node, E value) {
     //For BTree the lowest possible value in a node is the first value and the lowest possible child node is the left most node
-
-    E lowestComparableValue = bTreeNode.get(0);
+    E lowestComparableValue = node.get(0);
     BTreeNode leftBTreeNode = null;
     if (valueComparator.compare(value, lowestComparableValue) <= 0) {
-      leftBTreeNode = bTreeNode.getChild(0);
+      leftBTreeNode = node.getChild(0);
     }
     return leftBTreeNode;
   }
 
   /**
-   * @param currentBTreeNode current node under traversal.
-   * @param valueToBeAdded   the value that needs to be added to the tree.
+   * @param currentNode    current node under traversal.
+   * @param valueToBeAdded the value that needs to be added to the tree.
    * @return true if a value was added in current node, else returns false.
    */
-  private boolean checkAndInsertInCurrentNode(BTreeNode currentBTreeNode, E valueToBeAdded) {
-    if (currentBTreeNode.childrenSize() == 0) {
-      currentBTreeNode.add(valueToBeAdded);
-      if (currentBTreeNode.size() <= maximumValuesInNode) {
+  private boolean checkAndInsertInCurrentNode(BTreeNode currentNode, E valueToBeAdded) {
+    if (currentNode.childrenSize() == 0) {
+      currentNode.add(valueToBeAdded);
+      if (currentNode.size() <= maximumValuesInNode) {
         return true;
       }
-      splitAndBalance(currentBTreeNode);
+      splitAndBalance(currentNode);
       return true;
     }
     return false;
   }
 
-  private BTreeNode medianNode(E value, BTreeNode parentBTreeNode) {
+  private BTreeNode medianNode(E value, BTreeNode parentNode) {
     BTreeNode medianBTreeNode = null;
-    for (int i = 1; i < parentBTreeNode.size(); i++) {
-      E previousValue = parentBTreeNode.get(i - 1);
-      E nextValue = parentBTreeNode.get(i);
+    for (int i = 1; i < parentNode.size(); i++) {
+      E previousValue = parentNode.get(i - 1);
+      E nextValue = parentNode.get(i);
       if (valueComparator.compare(value, previousValue) > 0 && valueComparator.compare(value, nextValue) <= 0) {
-        medianBTreeNode = parentBTreeNode.getChild(i);
+        medianBTreeNode = parentNode.getChild(i);
         break;
       }
     }
@@ -158,10 +162,10 @@ public class BTree<E> implements Collection<E> {
   }
 
   /**
-   * @param bTreeNode split the current node and balance the tree
+   * @param node split the current node and balance the tree
    */
-  private void splitAndBalance(BTreeNode bTreeNode) {
-    BTreeNode nodeUnderSplit = bTreeNode;
+  private void splitAndBalance(BTreeNode node) {
+    BTreeNode nodeUnderSplit = node;
     int noOfElementsInNode = nodeUnderSplit.size();
     int medianIndex = noOfElementsInNode / 2;
     E medianValue = nodeUnderSplit.get(medianIndex);
