@@ -10,13 +10,12 @@ public class BTree<E> implements Collection<E> {
   private final int maximumValuesInNode;
   private final int order;
   private final Comparator<E> valueComparator;
-  protected transient int modCount = 0;
   private BTreeNode root;
   private int size;
 
   @SuppressWarnings("unchecked")
   public BTree(int order) {
-    this(order, (Comparator<E>) Comparator.nullsLast(Comparator.naturalOrder()));
+    this(order, (Comparator<E>) (Comparator.naturalOrder()));
   }
 
   public BTree() {
@@ -26,12 +25,11 @@ public class BTree<E> implements Collection<E> {
   public BTree(int order, Comparator<E> valueComparator) {
     this.maximumValuesInNode = order - 1;
     this.order = order;
-    this.valueComparator = valueComparator;
+    this.valueComparator = Comparator.nullsLast(valueComparator);
   }
 
   private void increaseSize() {
     this.size++;
-    this.modCount++;
   }
 
   @Override
@@ -70,12 +68,20 @@ public class BTree<E> implements Collection<E> {
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public <T> T[] toArray(T[] a) {
-    return null;
+    if (a.length < size)
+      // Make a new array of a's runtime type, but my contents:
+      return (T[]) Arrays.copyOf(toArray(), size, a.getClass());
+    System.arraycopy(toArray(), 0, a, 0, size);
+    if (a.length > size)
+      a[size] = null;
+    return a;
   }
 
   @Override
   public boolean add(E value) {
+    assert value != null;
     increaseSize();
     //base condition to insert the very first value
     if (isNull(root)) {
@@ -241,7 +247,9 @@ public class BTree<E> implements Collection<E> {
 
   @Override
   public boolean addAll(Collection<? extends E> c) {
-    return false;
+    int oldSize = size();
+    c.forEach(this::add);
+    return oldSize + c.size() == size;
   }
 
   @Override
