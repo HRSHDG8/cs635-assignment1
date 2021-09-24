@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BTreeTest {
 
-  BTree<Student> studentTree = null;
+  Tree<Student> studentTree = null;
 
   @BeforeEach
   public void init() {
@@ -48,6 +48,16 @@ public class BTreeTest {
   @Test
   public void addElementException() {
     assertThrows(AssertionError.class, () -> studentTree.add(null));
+  }
+
+  @Test
+  public void getElementInRange() {
+    assertEquals("Jack", studentTree.get(1).getName());
+  }
+
+  @Test
+  public void getException() {
+
   }
 
 }

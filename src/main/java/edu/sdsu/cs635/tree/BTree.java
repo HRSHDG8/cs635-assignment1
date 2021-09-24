@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 
-public class BTree<E> implements Collection<E> {
+public class BTree<E> implements Tree<E> {
   private static final int DEFAULT_ORDER = 3;
   private final int maximumValuesInNode;
   private final int order;
@@ -65,6 +65,18 @@ public class BTree<E> implements Collection<E> {
     }
     // makes sure a deep clone is returned so a change to array does not change the tree.
     return Arrays.copyOf(array, size);
+  }
+
+  @Override
+  public E get(int index) throws IndexOutOfBoundsException {
+    if (!isIndexOutOfBound(index)) {
+      for (E e : this) {
+        if (index-- == 0) {
+          return e;
+        }
+      }
+    }
+    throw new IndexOutOfBoundsException("Index " + index + " is out of bounds");
   }
 
   @Override
@@ -270,6 +282,36 @@ public class BTree<E> implements Collection<E> {
 
   private boolean isNull(BTreeNode node) {
     return node == null;
+  }
+
+  @Override
+  public Comparator<? super E> comparator() {
+    return valueComparator;
+  }
+
+  @Override
+  public SortedSet<E> subSet(E fromElement, E toElement) {
+    return null;
+  }
+
+  @Override
+  public SortedSet<E> headSet(E toElement) {
+    return null;
+  }
+
+  @Override
+  public SortedSet<E> tailSet(E fromElement) {
+    return null;
+  }
+
+  @Override
+  public E first() {
+    return null;
+  }
+
+  @Override
+  public E last() {
+    return null;
   }
 
   abstract class TreeIterator implements Iterator<E> {

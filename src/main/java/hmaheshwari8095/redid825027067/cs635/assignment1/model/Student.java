@@ -35,6 +35,10 @@ public class Student implements Comparable<Student> {
     System.out.println(name);
   }
 
+  public Double getGpa() {
+    return gpa;
+  }
+
   /**
    * @return true if students gpa < 2.85 else false
    */
