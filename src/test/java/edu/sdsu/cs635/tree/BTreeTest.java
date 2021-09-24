@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BTreeTest {
 
-  Tree<Student> studentTree = null;
+  SortedSetTree<Student> studentTree = null;
 
   @BeforeEach
   public void init() {

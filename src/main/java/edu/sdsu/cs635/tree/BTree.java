@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 
-public class BTree<E> implements Tree<E> {
+public class BTree<E> implements SortedSetTree<E> {
   private static final int DEFAULT_ORDER = 3;
   private final int maximumValuesInNode;
   private final int order;
