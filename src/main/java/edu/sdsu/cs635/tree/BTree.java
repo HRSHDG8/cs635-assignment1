@@ -147,7 +147,7 @@ public class BTree<E> implements Tree<E> {
   @Override
   public void clear() {
     size = 0;
-    root = null;
+    root = new NullNode();
   }
 
   //Sorted Set Api Methods

@@ -1,6 +1,6 @@
 package edu.sdsu.cs635.tree;
 
-import hmaheshwari8095.redid825027067.cs635.assignment1.model.Student;
+import edu.sdsu.cs635.model.Student;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
