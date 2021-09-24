@@ -13,6 +13,8 @@ public class BTree<E> implements Tree<E> {
   private BTreeNode root;
   private int size;
 
+  //Constructor Declarations
+
   @SuppressWarnings("unchecked")
   public BTree(int order) {
     this(order, (Comparator<E>) (Comparator.naturalOrder()));
@@ -28,9 +30,7 @@ public class BTree<E> implements Tree<E> {
     this.valueComparator = Comparator.nullsLast(valueComparator);
   }
 
-  private void increaseSize() {
-    this.size++;
-  }
+  //Set Api Methods
 
   @Override
   public int size() {
@@ -68,18 +68,6 @@ public class BTree<E> implements Tree<E> {
   }
 
   @Override
-  public E get(int index) throws IndexOutOfBoundsException {
-    if (!isIndexOutOfBound(index)) {
-      for (E e : this) {
-        if (index-- == 0) {
-          return e;
-        }
-      }
-    }
-    throw new IndexOutOfBoundsException("Index " + index + " is out of bounds");
-  }
-
-  @Override
   @SuppressWarnings("unchecked")
   public <T> T[] toArray(T[] a) {
     if (a.length < size)
@@ -99,17 +87,17 @@ public class BTree<E> implements Tree<E> {
     if (isNull(root)) {
       root = new BTreeNode(null, value);
     } else {
-      BTreeNode currentBTreeNode = root;
+      Node currentBTreeNode = root;
       while (!isNull(currentBTreeNode)) {
         if (checkAndInsertInCurrentNode(currentBTreeNode, value)) {
           break;
         }
-        BTreeNode leftBTreeNode = navigateLeft(currentBTreeNode, value);
+        Node leftBTreeNode = navigateLeft(currentBTreeNode, value);
         if (!isNull(leftBTreeNode)) {
           currentBTreeNode = leftBTreeNode;
           continue;
         }
-        BTreeNode rightBTreeNode = navigateRight(currentBTreeNode, value);
+        Node rightBTreeNode = navigateRight(currentBTreeNode, value);
         if (!isNull(rightBTreeNode)) {
           currentBTreeNode = rightBTreeNode;
           continue;
@@ -126,125 +114,6 @@ public class BTree<E> implements Tree<E> {
     while (reverseIterator.hasNext()) {
       acceptor.accept(reverseIterator.next());
     }
-  }
-
-  private BTreeNode navigateRight(BTreeNode node, E value) {
-    //For BTree the highest possible value in a node is the last value and the highest possible child node is the right most node
-    int indexOfLastElement = node.size() - 1;
-    BTreeNode rightBTreeNode = null;
-    E highestComparableValue = node.get(indexOfLastElement);
-    if (valueComparator.compare(value, highestComparableValue) > 0) {
-      rightBTreeNode = node.getChild(node.size());
-    }
-    return rightBTreeNode;
-  }
-
-  private BTreeNode navigateLeft(BTreeNode node, E value) {
-    //For BTree the lowest possible value in a node is the first value and the lowest possible child node is the left most node
-    E lowestComparableValue = node.get(0);
-    BTreeNode leftBTreeNode = null;
-    if (valueComparator.compare(value, lowestComparableValue) <= 0) {
-      leftBTreeNode = node.getChild(0);
-    }
-    return leftBTreeNode;
-  }
-
-  /**
-   * @param currentNode    current node under traversal.
-   * @param valueToBeAdded the value that needs to be added to the tree.
-   * @return true if a value was added in current node, else returns false.
-   */
-  private boolean checkAndInsertInCurrentNode(BTreeNode currentNode, E valueToBeAdded) {
-    if (currentNode.childrenSize() == 0) {
-      currentNode.add(valueToBeAdded);
-      if (currentNode.size() <= maximumValuesInNode) {
-        return true;
-      }
-      splitAndBalance(currentNode);
-      return true;
-    }
-    return false;
-  }
-
-  private BTreeNode medianNode(E value, BTreeNode parentNode) {
-    BTreeNode medianBTreeNode = null;
-    for (int i = 1; i < parentNode.size(); i++) {
-      E previousValue = parentNode.get(i - 1);
-      E nextValue = parentNode.get(i);
-      if (valueComparator.compare(value, previousValue) > 0 && valueComparator.compare(value, nextValue) <= 0) {
-        medianBTreeNode = parentNode.getChild(i);
-        break;
-      }
-    }
-    return medianBTreeNode;
-  }
-
-  /**
-   * @param node split the current node and balance the tree
-   */
-  private void splitAndBalance(BTreeNode node) {
-    BTreeNode nodeUnderSplit = node;
-    int noOfElementsInNode = nodeUnderSplit.size();
-    int medianIndex = noOfElementsInNode / 2;
-    E medianValue = nodeUnderSplit.get(medianIndex);
-    //start the split for the node from 0th index to the one before median for the values and child nodes
-    int leftStartIndex = 0;
-    int leftValueEndIndex = medianIndex - 1;
-    int leftChildEndIndex = medianIndex;
-    // Create a child node for the left section of the current node being spilt.
-    BTreeNode left = getNodeValuesAndChildrenInRange(nodeUnderSplit, leftStartIndex, leftValueEndIndex, leftChildEndIndex);
-    //start the split for the node from (median + 1) index to the last value for the values and the last child nodes
-    int rightStartIndex = medianIndex + 1;
-    int rightValueEndIndex = noOfElementsInNode - 1;
-    int rightChildEndIndex = nodeUnderSplit.childrenSize() - 1;
-    // Create a child node for the right section of the current node being spilt.
-    BTreeNode right = getNodeValuesAndChildrenInRange(nodeUnderSplit, rightStartIndex, rightValueEndIndex, rightChildEndIndex);
-    // a new parent or root node must be created if a parent does not exist
-    boolean shouldCreateNewRoot = isNull(nodeUnderSplit.getParent());
-    if (shouldCreateNewRoot) {
-      BTreeNode newRoot = new BTreeNode(null);
-      newRoot.add(medianValue);
-      nodeUnderSplit.setParent(newRoot);
-      //repoint BTrees' root to the newly created root node
-      root = newRoot;
-      nodeUnderSplit = root;
-      nodeUnderSplit.addChild(left);
-      nodeUnderSplit.addChild(right);
-    } else {
-      BTreeNode parent = nodeUnderSplit.getParent();
-      parent.add(medianValue);
-      parent.removeChild(nodeUnderSplit);
-      parent.addChild(left);
-      parent.addChild(right);
-      // if the parent overflows or is unbalanced, apply split and balance on it.
-      if (parent.size() > maximumValuesInNode) {
-        splitAndBalance(parent);
-      }
-    }
-  }
-
-  /**
-   * @param BTreeNodeToBeSplit the node undergoing spilt and balance
-   * @param startIndex         the index to spilt values and child node from
-   * @param valueEndIndex      the index upto which the value must be spilt
-   * @param childEndIndex      the index upto which the child nodes must be split
-   * @return a new node which can be attached to the parent.
-   */
-  private BTreeNode getNodeValuesAndChildrenInRange(BTreeNode BTreeNodeToBeSplit,
-                                                    int startIndex,
-                                                    int valueEndIndex,
-                                                    int childEndIndex) {
-    BTreeNode splitBTreeNode = new BTreeNode(null);
-    for (int i = startIndex; i <= valueEndIndex; i++) {
-      splitBTreeNode.add(BTreeNodeToBeSplit.get(i));
-    }
-    if (BTreeNodeToBeSplit.childrenSize() > 0) {
-      for (int j = startIndex; j <= childEndIndex; j++) {
-        BTreeNode childBTreeNode = BTreeNodeToBeSplit.getChild(j);
-        splitBTreeNode.addChild(childBTreeNode);
-      }
-    }
-    return splitBTreeNode;
   }
 
   @Override
@@ -280,10 +149,11 @@ public class BTree<E> implements Tree<E> {
     root = null;
   }
 
-  private boolean isNull(BTreeNode node) {
+  private boolean isNull(Node node) {
     return node == null;
   }
 
+  //Sorted Set Api Methods
   @Override
   public Comparator<? super E> comparator() {
     return valueComparator;
@@ -314,6 +184,146 @@ public class BTree<E> implements Tree<E> {
     return null;
   }
 
+  //Tree Api Methods
+  @Override
+  public E get(int index) throws IndexOutOfBoundsException {
+    if (!isIndexOutOfBound(index)) {
+      for (E e : this) {
+        if (index-- == 0) {
+          return e;
+        }
+      }
+    }
+    throw new IndexOutOfBoundsException("Index " + index + " is out of bounds");
+  }
+
+  //private methods
+
+  private void increaseSize() {
+    this.size++;
+  }
+
+  private Node navigateRight(Node node, E value) {
+    //For BTree the highest possible value in a node is the last value and the highest possible child node is the right most node
+    int indexOfLastElement = node.size() - 1;
+    Node rightBTreeNode = null;
+    E highestComparableValue = node.get(indexOfLastElement);
+    if (valueComparator.compare(value, highestComparableValue) > 0) {
+      rightBTreeNode = node.getChild(node.size());
+    }
+    return rightBTreeNode;
+  }
+
+  private Node navigateLeft(Node node, E value) {
+    //For BTree the lowest possible value in a node is the first value and the lowest possible child node is the left most node
+    E lowestComparableValue = node.get(0);
+    Node leftBTreeNode = null;
+    if (valueComparator.compare(value, lowestComparableValue) <= 0) {
+      leftBTreeNode = node.getChild(0);
+    }
+    return leftBTreeNode;
+  }
+
+  /**
+   * @param currentNode    current node under traversal.
+   * @param valueToBeAdded the value that needs to be added to the tree.
+   * @return true if a value was added in current node, else returns false.
+   */
+  private boolean checkAndInsertInCurrentNode(Node currentNode, E valueToBeAdded) {
+    if (currentNode.childrenSize() == 0) {
+      currentNode.add(valueToBeAdded);
+      if (currentNode.size() <= maximumValuesInNode) {
+        return true;
+      }
+      splitAndBalance(currentNode);
+      return true;
+    }
+    return false;
+  }
+
+  private Node medianNode(E value, Node parentNode) {
+    Node medianBTreeNode = null;
+    for (int i = 1; i < parentNode.size(); i++) {
+      E previousValue = parentNode.get(i - 1);
+      E nextValue = parentNode.get(i);
+      if (valueComparator.compare(value, previousValue) > 0 && valueComparator.compare(value, nextValue) <= 0) {
+        medianBTreeNode = parentNode.getChild(i);
+        break;
+      }
+    }
+    return medianBTreeNode;
+  }
+
+  /**
+   * @param node split the current node and balance the tree
+   */
+  private void splitAndBalance(Node node) {
+    Node nodeUnderSplit = node;
+    int noOfElementsInNode = nodeUnderSplit.size();
+    int medianIndex = noOfElementsInNode / 2;
+    E medianValue = nodeUnderSplit.get(medianIndex);
+    //start the split for the node from 0th index to the one before median for the values and child nodes
+    int leftStartIndex = 0;
+    int leftValueEndIndex = medianIndex - 1;
+    int leftChildEndIndex = medianIndex;
+    // Create a child node for the left section of the current node being spilt.
+    Node left = getNodeValuesAndChildrenInRange(nodeUnderSplit, leftStartIndex, leftValueEndIndex, leftChildEndIndex);
+    //start the split for the node from (median + 1) index to the last value for the values and the last child nodes
+    int rightStartIndex = medianIndex + 1;
+    int rightValueEndIndex = noOfElementsInNode - 1;
+    int rightChildEndIndex = nodeUnderSplit.childrenSize() - 1;
+    // Create a child node for the right section of the current node being spilt.
+    Node right = getNodeValuesAndChildrenInRange(nodeUnderSplit, rightStartIndex, rightValueEndIndex, rightChildEndIndex);
+    // a new parent or root node must be created if a parent does not exist
+    boolean shouldCreateNewRoot = isNull(nodeUnderSplit.getParent());
+    if (shouldCreateNewRoot) {
+      BTreeNode newRoot = new BTreeNode(null);
+      newRoot.add(medianValue);
+      nodeUnderSplit.setParent(newRoot);
+      //repoint BTrees' root to the newly created root node
+      root = newRoot;
+      nodeUnderSplit = root;
+      nodeUnderSplit.addChild(left);
+      nodeUnderSplit.addChild(right);
+    } else {
+      Node parent = nodeUnderSplit.getParent();
+      parent.add(medianValue);
+      parent.removeChild(nodeUnderSplit);
+      parent.addChild(left);
+      parent.addChild(right);
+      // if the parent overflows or is unbalanced, apply split and balance on it.
+      if (parent.size() > maximumValuesInNode) {
+        splitAndBalance(parent);
+      }
+    }
+  }
+
+  /**
+   * @param BTreeNodeToBeSplit the node undergoing spilt and balance
+   * @param startIndex         the index to spilt values and child node from
+   * @param valueEndIndex      the index upto which the value must be spilt
+   * @param childEndIndex      the index upto which the child nodes must be split
+   * @return a new node which can be attached to the parent.
+   */
+  private Node getNodeValuesAndChildrenInRange(Node BTreeNodeToBeSplit,
+                                               int startIndex,
+                                               int valueEndIndex,
+                                               int childEndIndex) {
+    Node splitBTreeNode = new BTreeNode(null);
+    for (int i = startIndex; i <= valueEndIndex; i++) {
+      splitBTreeNode.add(BTreeNodeToBeSplit.get(i));
+    }
+    if (BTreeNodeToBeSplit.childrenSize() > 0) {
+      for (int j = startIndex; j <= childEndIndex; j++) {
+        Node childBTreeNode = BTreeNodeToBeSplit.getChild(j);
+        splitBTreeNode.addChild(childBTreeNode);
+      }
+    }
+    return splitBTreeNode;
+  }
+
+  //TreeIterator Abstraction, has common code for iterator and reverse iterator
+
   abstract class TreeIterator implements Iterator<E> {
     int cursor;       // index of next element to return
     int expectedModCount;
@@ -325,10 +335,10 @@ public class BTree<E> implements Tree<E> {
     }
 
     class NodeIndexEntry {
-      private final BTreeNode node;
+      private final Node node;
       private final int startIndex;
 
-      protected NodeIndexEntry(BTreeNode node, int startIndex) {
+      protected NodeIndexEntry(Node node, int startIndex) {
         this.node = node;
         this.startIndex = startIndex;
       }
@@ -356,7 +366,7 @@ public class BTree<E> implements Tree<E> {
       checkForCoModification();
       while (!recursionStack.isEmpty()) {
         NodeIndexEntry entry = recursionStack.pop();
-        BTreeNode currentNode = entry.node;
+        Node currentNode = entry.node;
         int currentIndex = entry.startIndex;
         if (currentNode.isLeaf()) {
           E value = currentNode.get(currentIndex);
@@ -373,7 +383,7 @@ public class BTree<E> implements Tree<E> {
           if (currentIndex < currentNode.size()) {
             recursionStack.push(new NodeIndexEntry(currentNode, currentIndex + 1));
           }
-          BTreeNode child = currentNode.getChild(currentIndex);
+          Node child = currentNode.getChild(currentIndex);
           recursionStack.push(new NodeIndexEntry(child, 0));
           if (value != null) {
             cursor++;
@@ -406,7 +416,7 @@ public class BTree<E> implements Tree<E> {
       checkForCoModification();
       while (!recursionStack.isEmpty()) {
         NodeIndexEntry entry = recursionStack.pop();
-        BTreeNode currentNode = entry.node;
+        Node currentNode = entry.node;
         int currentIndex = entry.startIndex;
         if (currentNode.isLeaf()) {
           E value = currentNode.get(currentIndex);
@@ -423,7 +433,7 @@ public class BTree<E> implements Tree<E> {
           if (currentIndex >= 0) {
             recursionStack.push(new NodeIndexEntry(currentNode, currentIndex - 1));
           }
-          BTreeNode child = currentNode.getChild(currentIndex + 1);
+          Node child = currentNode.getChild(currentIndex + 1);
           recursionStack.push(new NodeIndexEntry(child, child.size() - 1));
           if (value != null) {
             cursor--;
@@ -435,21 +445,59 @@ public class BTree<E> implements Tree<E> {
     }
   }
 
+  abstract class Node {
+
+    List<E> values;
+    List<Node> children;
+    Comparator<Node> childNodeComparator;
+    Node parent;
+    int size;
+    int childrenSize;
+
+    abstract Node getParent();
+
+    abstract void setParent(BTreeNode parent);
+
+    abstract E get(int index);
+
+    abstract boolean add(E value);
+
+    abstract Node getChild(int index);
+
+    abstract boolean addChild(Node child);
+
+    abstract void removeChild(Node child);
+
+    abstract boolean isNull();
+
+    /**
+     * @return no of non-null elements in current node
+     */
+    int size() {
+      return size;
+    }
+
+    /**
+     * @return the no of non-null child nodes in current node
+     */
+    int childrenSize() {
+      return childrenSize;
+    }
+
+    boolean isLeaf() {
+      return childrenSize == 0;
+    }
+  }
+
   /**
    * A node for the {@link BTree} class
    * Each node holds a reference to its parent
    * A list of values it currently holds, and its count
    * A list of pointers to the child nodes, and its count
    */
-  private class BTreeNode {
-    private final List<E> values;
-    private final List<BTreeNode> children;
-    private final Comparator<BTreeNode> childNodeComparator;
-    private BTreeNode parent;
-    private int size;
-    private int childrenSize;
+  private class BTreeNode extends Node {
 
-    // access is protected, so that it can only be accessed in the same sub package
+    // access is private, so that it can only be accessed in the BTree Class
     private BTreeNode(BTreeNode parent, E value) {
       this(parent);
       this.add(value);
@@ -472,19 +520,15 @@ public class BTree<E> implements Tree<E> {
       this.childNodeComparator = Comparator.nullsLast((o1, o2) -> valueComparator.compare(o1.get(0), o2.get(0)));
     }
 
-    private BTreeNode getParent() {
+    Node getParent() {
       return parent;
     }
 
     /**
      * @param parent sets a parent node to the current node
      */
-    private void setParent(BTreeNode parent) {
+    void setParent(BTreeNode parent) {
       this.parent = parent;
-    }
-
-    private boolean isLeaf() {
-      return childrenSize == 0;
     }
 
     /**
@@ -493,7 +537,7 @@ public class BTree<E> implements Tree<E> {
      * @param index integer value to retrieve value from
      * @return a {@link E} at index in the current node.
      */
-    private E get(int index) {
+    E get(int index) {
       return values.get(index);
     }
 
@@ -503,16 +547,17 @@ public class BTree<E> implements Tree<E> {
      *
      * @param value a {@link E} object to be added to the current node
      */
-    private void add(E value) {
-      values.set(size++, value);
+    boolean add(E value) {
+      E isSet = values.set(size++, value);
       values.sort(valueComparator);
+      return isSet != null;
     }
 
     /**
      * @param index int value to retrieve node from
      * @return a child node at index
      */
-    private BTreeNode getChild(int index) {
+    Node getChild(int index) {
       return children.get(index);
     }
 
@@ -522,16 +567,17 @@ public class BTree<E> implements Tree<E> {
      *
      * @param child a child {@link BTreeNode} to be added to the current node
      */
-    private void addChild(BTreeNode child) {
+    boolean addChild(Node child) {
       child.parent = this;
-      children.set(childrenSize++, child);
+      Node setValue = children.set(childrenSize++, child);
       children.sort(childNodeComparator);
+      return setValue != null;
     }
 
     /**
      * @param child removes child {@link BTreeNode}, within the current node only, after spilt and balance happens
      */
-    private void removeChild(BTreeNode child) {
+    void removeChild(Node child) {
       boolean childNodeFound = false;
       if (isLeaf()) {
         return;
@@ -548,18 +594,51 @@ public class BTree<E> implements Tree<E> {
       }
     }
 
-    /**
-     * @return no of non-null elements in current node
-     */
-    int size() {
-      return size;
+    @Override
+    boolean isNull() {
+      return false;
+    }
+  }
+
+  private class NullNode extends Node {
+    @Override
+    Node getParent() {
+      return new NullNode();
     }
 
-    /**
-     * @return the no of non-null child nodes in current node
-     */
-    int childrenSize() {
-      return childrenSize;
+    @Override
+    void setParent(BTreeNode parent) {
+
+    }
+
+    @Override
+    E get(int index) {
+      return null;
+    }
+
+    @Override
+    boolean add(E value) {
+      return false;
+    }
+
+    @Override
+    Node getChild(int index) {
+      return null;
+    }
+
+    @Override
+    boolean addChild(Node child) {
+      return false;
+    }
+
+    @Override
+    void removeChild(Node child) {
+
+    }
+
+    @Override
+    boolean isNull() {
+      return true;
     }
   }
 }
