@@ -10,7 +10,7 @@ public class BTree<E> implements Tree<E> {
   private final int maximumValuesInNode;
   private final int order;
   private final Comparator<E> valueComparator;
-  private BTreeNode root;
+  private Node root;
   private int size;
 
   //Constructor Declarations
@@ -25,6 +25,7 @@ public class BTree<E> implements Tree<E> {
   }
 
   public BTree(int order, Comparator<E> valueComparator) {
+    this.root = new NullNode();
     this.maximumValuesInNode = order - 1;
     this.order = order;
     this.valueComparator = Comparator.nullsLast(valueComparator);
@@ -84,21 +85,21 @@ public class BTree<E> implements Tree<E> {
     assert value != null;
     increaseSize();
     //base condition to insert the very first value
-    if (isNull(root)) {
-      root = new BTreeNode(null, value);
+    if (root.isNull()) {
+      root = new BTreeNode(new NullNode(), value);
     } else {
       Node currentBTreeNode = root;
-      while (!isNull(currentBTreeNode)) {
+      while (!currentBTreeNode.isNull()) {
         if (checkAndInsertInCurrentNode(currentBTreeNode, value)) {
           break;
         }
         Node leftBTreeNode = navigateLeft(currentBTreeNode, value);
-        if (!isNull(leftBTreeNode)) {
+        if (!leftBTreeNode.isNull()) {
           currentBTreeNode = leftBTreeNode;
           continue;
         }
         Node rightBTreeNode = navigateRight(currentBTreeNode, value);
-        if (!isNull(rightBTreeNode)) {
+        if (!rightBTreeNode.isNull()) {
           currentBTreeNode = rightBTreeNode;
           continue;
         }
@@ -147,10 +148,6 @@ public class BTree<E> implements Tree<E> {
   public void clear() {
     size = 0;
     root = null;
-  }
-
-  private boolean isNull(Node node) {
-    return node == null;
   }
 
   //Sorted Set Api Methods
@@ -206,7 +203,7 @@ public class BTree<E> implements Tree<E> {
   private Node navigateRight(Node node, E value) {
     //For BTree the highest possible value in a node is the last value and the highest possible child node is the right most node
     int indexOfLastElement = node.size() - 1;
-    Node rightBTreeNode = null;
+    Node rightBTreeNode = new NullNode();
     E highestComparableValue = node.get(indexOfLastElement);
     if (valueComparator.compare(value, highestComparableValue) > 0) {
       rightBTreeNode = node.getChild(node.size());
@@ -217,7 +214,7 @@ public class BTree<E> implements Tree<E> {
   private Node navigateLeft(Node node, E value) {
     //For BTree the lowest possible value in a node is the first value and the lowest possible child node is the left most node
     E lowestComparableValue = node.get(0);
-    Node leftBTreeNode = null;
+    Node leftBTreeNode = new NullNode();
     if (valueComparator.compare(value, lowestComparableValue) <= 0) {
       leftBTreeNode = node.getChild(0);
     }
@@ -242,7 +239,7 @@ public class BTree<E> implements Tree<E> {
   }
 
   private Node medianNode(E value, Node parentNode) {
-    Node medianBTreeNode = null;
+    Node medianBTreeNode = new NullNode();
     for (int i = 1; i < parentNode.size(); i++) {
       E previousValue = parentNode.get(i - 1);
       E nextValue = parentNode.get(i);
@@ -275,10 +272,9 @@ public class BTree<E> implements Tree<E> {
     // Create a child node for the right section of the current node being spilt.
     Node right = getNodeValuesAndChildrenInRange(nodeUnderSplit, rightStartIndex, rightValueEndIndex, rightChildEndIndex);
     // a new parent or root node must be created if a parent does not exist
-    boolean shouldCreateNewRoot = isNull(nodeUnderSplit.getParent());
+    boolean shouldCreateNewRoot = nodeUnderSplit.getParent().isNull();
     if (shouldCreateNewRoot) {
-      BTreeNode newRoot = new BTreeNode(null);
-      newRoot.add(medianValue);
+      BTreeNode newRoot = new BTreeNode(new NullNode(), medianValue);
       nodeUnderSplit.setParent(newRoot);
       //repoint BTrees' root to the newly created root node
       root = newRoot;
@@ -309,7 +305,7 @@ public class BTree<E> implements Tree<E> {
                                                int startIndex,
                                                int valueEndIndex,
                                                int childEndIndex) {
-    Node splitBTreeNode = new BTreeNode(null);
+    Node splitBTreeNode = new BTreeNode(new NullNode());
     for (int i = startIndex; i <= valueEndIndex; i++) {
       splitBTreeNode.add(BTreeNodeToBeSplit.get(i));
     }
@@ -498,22 +494,22 @@ public class BTree<E> implements Tree<E> {
   private class BTreeNode extends Node {
 
     // access is private, so that it can only be accessed in the BTree Class
-    private BTreeNode(BTreeNode parent, E value) {
+    private BTreeNode(Node parent, E value) {
       this(parent);
       this.add(value);
     }
 
-    private BTreeNode(BTreeNode parent) {
+    private BTreeNode(Node parent) {
       this.parent = parent;
       // the list is initialized with order and not order - 1, to accommodate the extra value that would be needed to process splitAndBalance
       // only order - 1 element will be present in the node
       this.values = new ArrayList<>(order);
       this.children = new ArrayList<>(order + 1);
       for (int i = 0; i < order; i++) {
-        children.add(null);
+        children.add(new NullNode());
         values.add(null);
       }
-      children.add(null);
+      children.add(new NullNode());
       this.size = 0;
       this.childrenSize = 0;
       //sort child nodes by the comparable value of first element of each child node
@@ -590,7 +586,7 @@ public class BTree<E> implements Tree<E> {
         }
       }
       if (childNodeFound) {
-        children.set(--childrenSize, null);
+        children.set(--childrenSize, new NullNode());
       }
     }
 
