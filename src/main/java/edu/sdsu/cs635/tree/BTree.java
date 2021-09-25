@@ -20,6 +20,10 @@ public class BTree<E> implements SortedSetTree<E> {
     this(order, (Comparator<E>) (Comparator.naturalOrder()));
   }
 
+  public BTree(Comparator<E> comparator) {
+    this(DEFAULT_ORDER, comparator);
+  }
+
   public BTree() {
     this(DEFAULT_ORDER);
   }
