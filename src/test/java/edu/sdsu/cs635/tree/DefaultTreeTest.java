@@ -3,6 +3,8 @@ package edu.sdsu.cs635.tree;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,6 +45,13 @@ public class DefaultTreeTest {
   public void getWhenIndexOutOfRange() {
     assertThrows(IndexOutOfBoundsException.class, () -> numberTree.get(-1));
     assertThrows(IndexOutOfBoundsException.class, () -> numberTree.get(numberTree.size()));
+  }
+
+  @Test
+  public void addAll() {
+    List<Integer> elementsToBeAdded = Arrays.asList(-2, -10, 6, 34, 2, -9);
+    numberTree.addAll(elementsToBeAdded);
+    assertEquals(-10, numberTree.get(0));
   }
 
 }
