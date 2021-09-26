@@ -14,6 +14,9 @@ public class BTree<E> implements SortedSetTree<E> {
   private int size;
 
   //Constructor Declarations
+  public BTree() {
+    this(DEFAULT_ORDER);
+  }
 
   @SuppressWarnings("unchecked")
   public BTree(int order) {
@@ -24,19 +27,15 @@ public class BTree<E> implements SortedSetTree<E> {
     this(DEFAULT_ORDER, comparator);
   }
 
-  public BTree() {
-    this(DEFAULT_ORDER);
-  }
-
   public BTree(int order, Comparator<E> valueComparator) {
     this.root = new NullNode();
     this.maximumValuesInNode = order - 1;
     this.order = order;
     this.valueComparator = Comparator.nullsLast(valueComparator);
   }
+  //End Constructor Declarations
 
-  //Set Api Methods
-
+  //java.util.Set Api Methods
   @Override
   public int size() {
     return size;
@@ -162,8 +161,9 @@ public class BTree<E> implements SortedSetTree<E> {
     size = 0;
     root = new NullNode();
   }
+  //End java.util.Set API Methods
 
-  //Sorted Set Api Methods
+  //java.util.SortedSet Api Methods
   @Override
   public Comparator<? super E> comparator() {
     return valueComparator;
@@ -194,7 +194,9 @@ public class BTree<E> implements SortedSetTree<E> {
     return null;
   }
 
-  //Tree Api Methods
+  //end java.util.SortedSet Api Methods
+
+  //edu.sdsu.cs635.SortedSetTree Api Methods
   @Override
   public E get(int index) throws IndexOutOfBoundsException {
     if (!isIndexOutOfBound(index)) {
@@ -206,6 +208,7 @@ public class BTree<E> implements SortedSetTree<E> {
     }
     throw new IndexOutOfBoundsException("Index " + index + " is out of bounds");
   }
+  //end edu.sdsu.cs635.SortedSetTree Api Methods
 
   //private methods
 
@@ -327,6 +330,8 @@ public class BTree<E> implements SortedSetTree<E> {
     }
     return splitBTreeNode;
   }
+
+  //end private methods
 
   //TreeIterator Abstraction, has common code for iterator and reverse iterator
 
@@ -580,7 +585,7 @@ public class BTree<E> implements SortedSetTree<E> {
     }
 
     /**
-     * @param child removes child {@link BTreeNode}, within the current node only, after spilt and balance happens
+     * @param child removes child {@link Node}, within the current node only, after spilt and balance happens
      */
     void removeChild(Node child) {
       boolean childNodeFound = false;
