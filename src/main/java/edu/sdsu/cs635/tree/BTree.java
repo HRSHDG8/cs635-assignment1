@@ -49,6 +49,11 @@ public class BTree<E> implements SortedSetTree<E> {
 
   @Override
   public boolean contains(Object o) {
+    for (E e : this) {
+      if (e.equals(o)) {
+        return true;
+      }
+    }
     return false;
   }
 
@@ -128,7 +133,11 @@ public class BTree<E> implements SortedSetTree<E> {
 
   @Override
   public boolean containsAll(Collection<?> c) {
-    return false;
+    boolean containsValue = true;
+    for (E e : this) {
+      containsValue &= c.contains(e);
+    }
+    return containsValue;
   }
 
   @Override
@@ -299,23 +308,20 @@ public class BTree<E> implements SortedSetTree<E> {
   }
 
   /**
-   * @param BTreeNodeToBeSplit the node undergoing spilt and balance
-   * @param startIndex         the index to spilt values and child node from
-   * @param valueEndIndex      the index upto which the value must be spilt
-   * @param childEndIndex      the index upto which the child nodes must be split
+   * @param nodeToBeSplit the node undergoing spilt and balance
+   * @param startIndex    the index to spilt values and child node from
+   * @param valueEndIndex the index upto which the value must be spilt
+   * @param childEndIndex the index upto which the child nodes must be split
    * @return a new node which can be attached to the parent.
    */
-  private Node getNodeValuesAndChildrenInRange(Node BTreeNodeToBeSplit,
-                                               int startIndex,
-                                               int valueEndIndex,
-                                               int childEndIndex) {
+  private Node getNodeValuesAndChildrenInRange(Node nodeToBeSplit, int startIndex, int valueEndIndex, int childEndIndex) {
     Node splitBTreeNode = new BTreeNode(new NullNode());
     for (int i = startIndex; i <= valueEndIndex; i++) {
-      splitBTreeNode.add(BTreeNodeToBeSplit.get(i));
+      splitBTreeNode.add(nodeToBeSplit.get(i));
     }
-    if (BTreeNodeToBeSplit.childrenSize() > 0) {
+    if (nodeToBeSplit.childrenSize() > 0) {
       for (int j = startIndex; j <= childEndIndex; j++) {
-        Node childBTreeNode = BTreeNodeToBeSplit.getChild(j);
+        Node childBTreeNode = nodeToBeSplit.getChild(j);
         splitBTreeNode.addChild(childBTreeNode);
       }
     }
@@ -446,7 +452,6 @@ public class BTree<E> implements SortedSetTree<E> {
   }
 
   abstract class Node {
-
     List<E> values;
     List<Node> children;
     Comparator<Node> childNodeComparator;
@@ -571,7 +576,7 @@ public class BTree<E> implements SortedSetTree<E> {
       child.parent = this;
       Node setValue = children.set(childrenSize++, child);
       children.sort(childNodeComparator);
-      return setValue != null;
+      return !setValue.isNull();
     }
 
     /**
@@ -600,6 +605,7 @@ public class BTree<E> implements SortedSetTree<E> {
     }
   }
 
+  // Null Object Pattern Implementation for the Node abstraction
   private class NullNode extends Node {
     @Override
     Node getParent() {
