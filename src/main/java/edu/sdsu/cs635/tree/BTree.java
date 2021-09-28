@@ -9,7 +9,7 @@ public class BTree<E> implements SortedSetTree<E> {
   private static final int DEFAULT_ORDER = 3;
   private final int maximumValuesInNode;
   private final int order;
-  private final Comparator<E> valueComparator;
+  private final Comparator<E> comparisonStrategy;
   private Node root;
   private int size;
 
@@ -27,11 +27,12 @@ public class BTree<E> implements SortedSetTree<E> {
     this(DEFAULT_ORDER, comparator);
   }
 
-  public BTree(int order, Comparator<E> valueComparator) {
+  public BTree(int order, Comparator<E> strategy) {
     this.root = new NullNode();
     this.maximumValuesInNode = order - 1;
     this.order = order;
-    this.valueComparator = Comparator.nullsLast(valueComparator);
+    // comparing with the strategy passed by API consumer and make it null tolerant with Comparator.nullsLast
+    this.comparisonStrategy = Comparator.nullsLast(strategy);
   }
   //End Constructor Declarations
 
@@ -94,7 +95,7 @@ public class BTree<E> implements SortedSetTree<E> {
     increaseSize();
     //base condition to insert the very first value
     if (root.isNull()) {
-      root = new BTreeNode(new NullNode(), value);
+      root = new DataNode(new NullNode(), value);
     } else {
       Node currentBTreeNode = root;
       while (!currentBTreeNode.isNull()) {
@@ -166,22 +167,22 @@ public class BTree<E> implements SortedSetTree<E> {
   //java.util.SortedSet Api Methods
   @Override
   public Comparator<? super E> comparator() {
-    return valueComparator;
+    return comparisonStrategy;
   }
 
   @Override
   public SortedSet<E> subSet(E fromElement, E toElement) {
-    return null;
+    return Collections.emptySortedSet();
   }
 
   @Override
   public SortedSet<E> headSet(E toElement) {
-    return null;
+    return Collections.emptySortedSet();
   }
 
   @Override
   public SortedSet<E> tailSet(E fromElement) {
-    return null;
+    return Collections.emptySortedSet();
   }
 
   @Override
@@ -221,7 +222,7 @@ public class BTree<E> implements SortedSetTree<E> {
     int indexOfLastElement = node.size() - 1;
     Node rightBTreeNode = new NullNode();
     E highestComparableValue = node.get(indexOfLastElement);
-    if (valueComparator.compare(value, highestComparableValue) > 0) {
+    if (comparisonStrategy.compare(value, highestComparableValue) > 0) {
       rightBTreeNode = node.getChild(node.size());
     }
     return rightBTreeNode;
@@ -231,7 +232,7 @@ public class BTree<E> implements SortedSetTree<E> {
     //For BTree the lowest possible value in a node is the first value and the lowest possible child node is the left most node
     E lowestComparableValue = node.get(0);
     Node leftBTreeNode = new NullNode();
-    if (valueComparator.compare(value, lowestComparableValue) <= 0) {
+    if (comparisonStrategy.compare(value, lowestComparableValue) <= 0) {
       leftBTreeNode = node.getChild(0);
     }
     return leftBTreeNode;
@@ -259,7 +260,7 @@ public class BTree<E> implements SortedSetTree<E> {
     for (int i = 1; i < parentNode.size(); i++) {
       E previousValue = parentNode.get(i - 1);
       E nextValue = parentNode.get(i);
-      if (valueComparator.compare(value, previousValue) > 0 && valueComparator.compare(value, nextValue) <= 0) {
+      if (comparisonStrategy.compare(value, previousValue) > 0 && comparisonStrategy.compare(value, nextValue) <= 0) {
         medianBTreeNode = parentNode.getChild(i);
         break;
       }
@@ -268,6 +269,12 @@ public class BTree<E> implements SortedSetTree<E> {
   }
 
   /**
+   * This method creates a new node and attaches it to the tree rather than shifting values.
+   * The strategy is to create a median node as parent,
+   * a left node for all left values and child nodes,
+   * a right node for all right values and child nodes,
+   * Then insert the median node at appropriate position, the old overflow node is Garbage collected.
+   *
    * @param node split the current node and balance the tree
    */
   private void splitAndBalance(Node node) {
@@ -290,7 +297,7 @@ public class BTree<E> implements SortedSetTree<E> {
     // a new parent or root node must be created if a parent does not exist
     boolean shouldCreateNewRoot = nodeUnderSplit.getParent().isNull();
     if (shouldCreateNewRoot) {
-      BTreeNode newRoot = new BTreeNode(new NullNode(), medianValue);
+      DataNode newRoot = new DataNode(new NullNode(), medianValue);
       nodeUnderSplit.setParent(newRoot);
       //repoint BTrees' root to the newly created root node
       root = newRoot;
@@ -318,7 +325,7 @@ public class BTree<E> implements SortedSetTree<E> {
    * @return a new node which can be attached to the parent.
    */
   private Node getNodeValuesAndChildrenInRange(Node nodeToBeSplit, int startIndex, int valueEndIndex, int childEndIndex) {
-    Node splitBTreeNode = new BTreeNode(new NullNode());
+    Node splitBTreeNode = new DataNode(new NullNode());
     for (int i = startIndex; i <= valueEndIndex; i++) {
       splitBTreeNode.add(nodeToBeSplit.get(i));
     }
@@ -466,7 +473,7 @@ public class BTree<E> implements SortedSetTree<E> {
 
     abstract Node getParent();
 
-    abstract void setParent(BTreeNode parent);
+    abstract void setParent(DataNode parent);
 
     abstract E get(int index);
 
@@ -476,7 +483,7 @@ public class BTree<E> implements SortedSetTree<E> {
 
     abstract boolean addChild(Node child);
 
-    abstract void removeChild(Node child);
+    abstract boolean removeChild(Node child);
 
     abstract boolean isNull();
 
@@ -505,15 +512,15 @@ public class BTree<E> implements SortedSetTree<E> {
    * A list of values it currently holds, and its count
    * A list of pointers to the child nodes, and its count
    */
-  private class BTreeNode extends Node {
+  private class DataNode extends Node {
 
     // access is private, so that it can only be accessed in the BTree Class
-    private BTreeNode(Node parent, E value) {
+    private DataNode(Node parent, E value) {
       this(parent);
       this.add(value);
     }
 
-    private BTreeNode(Node parent) {
+    private DataNode(Node parent) {
       this.parent = parent;
       // the list is initialized with order and not order - 1, to accommodate the extra value that would be needed to process splitAndBalance
       // only order - 1 element will be present in the node
@@ -527,7 +534,7 @@ public class BTree<E> implements SortedSetTree<E> {
       this.size = 0;
       this.childrenSize = 0;
       //sort child nodes by the comparable value of first element of each child node
-      this.childNodeComparator = Comparator.nullsLast((o1, o2) -> valueComparator.compare(o1.get(0), o2.get(0)));
+      this.childNodeComparator = Comparator.nullsLast((o1, o2) -> comparisonStrategy.compare(o1.get(0), o2.get(0)));
     }
 
     Node getParent() {
@@ -537,7 +544,7 @@ public class BTree<E> implements SortedSetTree<E> {
     /**
      * @param parent sets a parent node to the current node
      */
-    void setParent(BTreeNode parent) {
+    void setParent(DataNode parent) {
       this.parent = parent;
     }
 
@@ -559,7 +566,7 @@ public class BTree<E> implements SortedSetTree<E> {
      */
     boolean add(E value) {
       E isSet = values.set(size++, value);
-      values.sort(valueComparator);
+      values.sort(comparisonStrategy);
       return isSet != null;
     }
 
@@ -572,10 +579,10 @@ public class BTree<E> implements SortedSetTree<E> {
     }
 
     /**
-     * adds a {@link BTreeNode} to children List, increments the noOfChildNodes
+     * adds a {@link DataNode} to children List, increments the noOfChildNodes
      * and sorts the T object in the comparable order keeping nulls at last
      *
-     * @param child a child {@link BTreeNode} to be added to the current node
+     * @param child a child {@link DataNode} to be added to the current node
      */
     boolean addChild(Node child) {
       child.parent = this;
@@ -587,11 +594,11 @@ public class BTree<E> implements SortedSetTree<E> {
     /**
      * @param child removes child {@link Node}, within the current node only, after spilt and balance happens
      */
-    void removeChild(Node child) {
-      boolean childNodeFound = false;
+    boolean removeChild(Node child) {
       if (isLeaf()) {
-        return;
+        return false;
       }
+      boolean childNodeFound = false;
       for (int i = 0; i < childrenSize; i++) {
         if (children.get(i).equals(child)) {
           childNodeFound = true;
@@ -602,6 +609,7 @@ public class BTree<E> implements SortedSetTree<E> {
       if (childNodeFound) {
         children.set(--childrenSize, new NullNode());
       }
+      return childNodeFound;
     }
 
     @Override
@@ -618,7 +626,7 @@ public class BTree<E> implements SortedSetTree<E> {
     }
 
     @Override
-    void setParent(BTreeNode parent) {
+    void setParent(DataNode parent) {
 
     }
 
@@ -643,8 +651,8 @@ public class BTree<E> implements SortedSetTree<E> {
     }
 
     @Override
-    void removeChild(Node child) {
-
+    boolean removeChild(Node child) {
+      return false;
     }
 
     @Override
