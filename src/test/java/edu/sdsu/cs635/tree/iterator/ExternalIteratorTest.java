@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;
-import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -27,9 +27,10 @@ public class ExternalIteratorTest {
 
   @Test
   public void iteratorTest() {
-    Iterator<Student> studentIterator = studentTree.iterator();
-    if (studentIterator.hasNext()) {
-      assertEquals("Alex", studentIterator.next().getName());
+    String[] expectedOrder = new String[]{"Alex", "Jack", "Joshua", "Max", "Marrissa", "Olivia"};
+    AtomicInteger index = new AtomicInteger(0);
+    for (Student student : studentTree) {
+      assertEquals(expectedOrder[index.getAndIncrement()], student.getName());
     }
   }
 }
