@@ -56,6 +56,11 @@ public class DefaultTreeTest {
   }
 
   @Test
+  public void addElementException() {
+    assertThrows(AssertionError.class, () -> numberTree.add(null));
+  }
+
+  @Test
   public void containsAllTest() {
     assertTrue(numberTree.containsAll(Arrays.asList(2, 3)));
   }
@@ -99,5 +104,6 @@ public class DefaultTreeTest {
     numberTree.clear();
     assertThrows(IndexOutOfBoundsException.class, () -> numberTree.iterator().next());
   }
+
 
 }
