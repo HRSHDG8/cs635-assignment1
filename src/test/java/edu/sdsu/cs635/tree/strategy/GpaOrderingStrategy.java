@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class GpaOrderingStrategy {
   //Strategy that compares Students by there GPA
   private static final Comparator<Student> GPA_ORDERING_STRATEGY = Comparator.comparing(Student::getGpa);
-  SortedSetTree<Student> studentTree = null;
+  private SortedSetTree<Student> studentTree = null;
 
   @BeforeEach
   public void init() {

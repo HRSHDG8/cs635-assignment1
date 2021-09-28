@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class CustomComparatorTree {
   private static final int DEFAULT_TEST_SIZE = 10;
-  SortedSetTree<Integer> numberTree = null;
+  private SortedSetTree<Integer> numberTree = null;
 
   @BeforeEach
   public void init() {

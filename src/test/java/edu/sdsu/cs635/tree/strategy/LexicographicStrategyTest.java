@@ -14,7 +14,7 @@ public class LexicographicStrategyTest {
 
   //Strategy that compares Students by there name ignoring case sensitivity
   private static final Comparator<Student> LEXICOGRAPHIC_ORDERING_STRATEGY = Comparator.comparing(o -> o.getName().toLowerCase());
-  SortedSetTree<Student> studentTree = null;
+  private SortedSetTree<Student> studentTree = null;
 
   @BeforeEach
   public void init() {
