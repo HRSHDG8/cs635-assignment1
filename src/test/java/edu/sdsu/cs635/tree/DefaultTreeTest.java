@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -68,6 +70,34 @@ public class DefaultTreeTest {
     assertFalse(numberTree.isEmpty());
     numberTree.clear();
     assertTrue(numberTree.isEmpty());
+  }
+
+  @Test
+  public void checkFirstAndLastElement() {
+    assertEquals(0, numberTree.first());
+    assertEquals(DEFAULT_TEST_SIZE - 1, numberTree.last());
+  }
+
+  @Test
+  public void checkFirstAndLastOnEmptyTree() {
+    numberTree.clear();
+    assertNull(numberTree.first());
+    assertNull(numberTree.last());
+  }
+
+  @Test
+  public void coModificationTest() {
+    Iterator<Integer> numberIterator = numberTree.iterator();
+    if (numberIterator.hasNext()) {
+      numberTree.add(11);
+      assertThrows(ConcurrentModificationException.class, numberIterator::next);
+    }
+  }
+
+  @Test
+  public void testNextOnAnEmptyTree() {
+    numberTree.clear();
+    assertThrows(IndexOutOfBoundsException.class, () -> numberTree.iterator().next());
   }
 
 }

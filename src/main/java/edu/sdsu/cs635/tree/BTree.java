@@ -3,6 +3,13 @@ package edu.sdsu.cs635.tree;
 import java.util.*;
 import java.util.function.Consumer;
 
+/**
+ * Implementation of {@link SortedSetTree} which extends {@link SortedSet} from {@link Collection} framework
+ * The Default order of the tree is 3 and the default comparison strategy is of Natural Order (From the {@link Comparator} framewrok)
+ * Any class that implements {@link Comparable} can create a {@link BTree} without passing a comparison Strategy
+ *
+ * @param <E>
+ */
 public class BTree<E> implements SortedSetTree<E> {
   private static final int DEFAULT_ORDER = 3;
   private final int maximumValuesInNode;
@@ -406,7 +413,7 @@ public class BTree<E> implements SortedSetTree<E> {
     @Override
     public E next() {
       checkForCoModification();
-      while (!recursionStack.isEmpty()) {
+      while (!recursionStack.isEmpty() && !isEmpty()) {
         NodeIndexEntry entry = recursionStack.pop();
         Node currentNode = entry.node;
         int currentIndex = entry.startIndex;
@@ -456,7 +463,7 @@ public class BTree<E> implements SortedSetTree<E> {
     @Override
     public E next() {
       checkForCoModification();
-      while (!recursionStack.isEmpty()) {
+      while (!recursionStack.isEmpty() && !isEmpty()) {
         NodeIndexEntry entry = recursionStack.pop();
         Node currentNode = entry.node;
         int currentIndex = entry.startIndex;
