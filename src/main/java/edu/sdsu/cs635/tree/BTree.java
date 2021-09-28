@@ -209,9 +209,10 @@ public class BTree<E> implements SortedSetTree<E> {
 
   @Override
   public E get(int index) throws IndexOutOfBoundsException {
+    int counter = 0;
     if (!isIndexOutOfBound(index)) {
       for (E e : this) {
-        if (index-- == 0) {
+        if (counter++ == index) {
           return e;
         }
       }
@@ -665,7 +666,7 @@ public class BTree<E> implements SortedSetTree<E> {
 
     @Override
     Node getChild(int index) {
-      return null;
+      return new NullNode();
     }
 
     @Override

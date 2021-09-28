@@ -2,10 +2,8 @@ package edu.sdsu.cs635.model;
 
 /**
  * Student class holds vital information pertaining to a student.
- * This class extends Comparable to give a custom implementation to compare
- * Student objects by their name in lexicographical order.
- * Implementing Comparable also gives an abstraction so that Student can be
- * added in tree
+ * A student is probationary if his GPA < 2.85
+ * A student has a perfect score if his GPA = 4.0
  */
 public class Student {
   private final Long redId;
@@ -22,28 +20,14 @@ public class Student {
     return name;
   }
 
-  public void printRedId() {
-    System.out.println(redId);
-  }
-
-  public void printName() {
-    System.out.println(name);
-  }
-
   public Double getGpa() {
     return gpa;
   }
 
-  /**
-   * @return true if students gpa < 2.85 else false
-   */
   public boolean amIProbationary() {
     return gpa < 2.85;
   }
 
-  /**
-   * @return true if students gpa is equal to 4 else false
-   */
   public boolean isPerfectScore() {
     return gpa.equals(4.00);
   }

@@ -63,4 +63,11 @@ public class DefaultTreeTest {
     assertFalse(numberTree.containsAll(Arrays.asList(2, 11)));
   }
 
+  @Test
+  public void clearTree() {
+    assertFalse(numberTree.isEmpty());
+    numberTree.clear();
+    assertTrue(numberTree.isEmpty());
+  }
+
 }
