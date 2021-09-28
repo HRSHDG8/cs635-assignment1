@@ -1,9 +1,7 @@
 package edu.sdsu.cs635.tree;
 
-
 import java.util.*;
 import java.util.function.Consumer;
-
 
 public class BTree<E> implements SortedSetTree<E> {
   private static final int DEFAULT_ORDER = 3;
@@ -297,7 +295,7 @@ public class BTree<E> implements SortedSetTree<E> {
     // a new parent or root node must be created if a parent does not exist
     boolean shouldCreateNewRoot = nodeUnderSplit.getParent().isNull();
     if (shouldCreateNewRoot) {
-      DataNode newRoot = new DataNode(new NullNode(), medianValue);
+      Node newRoot = new DataNode(new NullNode(), medianValue);
       nodeUnderSplit.setParent(newRoot);
       //repoint BTrees' root to the newly created root node
       root = newRoot;
@@ -342,8 +340,17 @@ public class BTree<E> implements SortedSetTree<E> {
 
   //TreeIterator Abstraction, has common code for iterator and reverse iterator
 
+  /**
+   * Common Abstraction to implement Iterator and ReverseIterator.
+   * Has common logic and data abstracted needed to implement an Iterator for {@link BTree}
+   * A stack to store the nodes in line for access, a final function that checks if tree has been modified after iterator was created.
+   */
   abstract class TreeIterator implements Iterator<E> {
-    int cursor;       // index of next element to return
+    // index of next element to return
+    int cursor;
+    // This field is to keep a copy of the expected modification count of the BTree in this case its the size.
+    // the logic works with tree since we don't have a remove function and tree size can not decrease.
+    // TODO implement modCount logic on tree if time permits and use that to check for modification
     int expectedModCount;
     Stack<NodeIndexEntry> recursionStack;
 
@@ -363,6 +370,10 @@ public class BTree<E> implements SortedSetTree<E> {
     }
   }
 
+  /**
+   * Inorder implementation to support iterator interface on the {@link BTree} class.
+   * The implementation banks on A stack that has the current Node under traversal and what element of the node is to be accessed next.
+   */
   class InOrderTreeIterator extends TreeIterator {
 
     public InOrderTreeIterator() {
@@ -473,7 +484,7 @@ public class BTree<E> implements SortedSetTree<E> {
 
     abstract Node getParent();
 
-    abstract void setParent(DataNode parent);
+    abstract void setParent(Node parent);
 
     abstract E get(int index);
 
@@ -544,7 +555,7 @@ public class BTree<E> implements SortedSetTree<E> {
     /**
      * @param parent sets a parent node to the current node
      */
-    void setParent(DataNode parent) {
+    void setParent(Node parent) {
       this.parent = parent;
     }
 
@@ -579,10 +590,10 @@ public class BTree<E> implements SortedSetTree<E> {
     }
 
     /**
-     * adds a {@link DataNode} to children List, increments the noOfChildNodes
+     * adds a {@link Node} to children List, increments the noOfChildNodes
      * and sorts the T object in the comparable order keeping nulls at last
      *
-     * @param child a child {@link DataNode} to be added to the current node
+     * @param child a child {@link Node} to be added to the current node
      */
     boolean addChild(Node child) {
       child.parent = this;
@@ -626,7 +637,7 @@ public class BTree<E> implements SortedSetTree<E> {
     }
 
     @Override
-    void setParent(DataNode parent) {
+    void setParent(Node parent) {
 
     }
 

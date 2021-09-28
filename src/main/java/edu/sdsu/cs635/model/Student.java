@@ -7,7 +7,7 @@ package edu.sdsu.cs635.model;
  * Implementing Comparable also gives an abstraction so that Student can be
  * added in tree
  */
-public class Student implements Comparable<Student> {
+public class Student {
   private final Long redId;
   private final String name;
   private final Double gpa;
@@ -18,11 +18,6 @@ public class Student implements Comparable<Student> {
     this.gpa = gpa;
   }
 
-  /**
-   * Getter to compare with another students name.
-   *
-   * @return students' name.
-   */
   public String getName() {
     return name;
   }
@@ -51,17 +46,6 @@ public class Student implements Comparable<Student> {
    */
   public boolean isPerfectScore() {
     return gpa.equals(4.00);
-  }
-
-  /**
-   * @param otherStudent the comparison object
-   * @return 0 if names are same, -1 if the otherStudents name is
-   * lexicographically greater than this student else return 1
-   */
-  @Override
-  public int compareTo(Student otherStudent) {
-    return this.name.toLowerCase()
-       .compareTo(otherStudent.getName().toLowerCase());
   }
 
   @Override
