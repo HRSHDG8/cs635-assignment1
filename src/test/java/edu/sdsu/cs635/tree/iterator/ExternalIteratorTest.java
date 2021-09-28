@@ -27,7 +27,7 @@ public class ExternalIteratorTest {
 
   @Test
   public void iteratorTest() {
-    String[] expectedOrder = new String[]{"Alex", "Jack", "Joshua", "Max", "Marrissa", "Olivia"};
+    String[] expectedOrder = new String[]{"Alex", "Jack", "Joshua", "Marrissa", "Max", "Olivia"};
     AtomicInteger index = new AtomicInteger(0);
     for (Student student : studentTree) {
       assertEquals(expectedOrder[index.getAndIncrement()], student.getName());

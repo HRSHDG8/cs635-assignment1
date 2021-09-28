@@ -185,12 +185,22 @@ public class BTree<E> implements SortedSetTree<E> {
 
   @Override
   public E first() {
-    return null;
+    Iterator<E> inOrderIterator = new InOrderTreeIterator();
+    if (inOrderIterator.hasNext()) {
+      return inOrderIterator.next();
+    } else {
+      return null;
+    }
   }
 
   @Override
   public E last() {
-    return null;
+    Iterator<E> inOrderIterator = new ReverseOrderTreeIterator();
+    if (inOrderIterator.hasNext()) {
+      return inOrderIterator.next();
+    } else {
+      return null;
+    }
   }
 
   //end java.util.SortedSet Api Methods
