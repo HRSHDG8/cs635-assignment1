@@ -24,6 +24,10 @@ public class Student {
     return gpa;
   }
 
+  public Long getRedId() {
+    return redId;
+  }
+
   public boolean amIProbationary() {
     return gpa < 2.85;
   }

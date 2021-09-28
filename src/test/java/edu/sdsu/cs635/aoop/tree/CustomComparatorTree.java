@@ -64,4 +64,17 @@ public class CustomComparatorTree {
       assertEquals(--size, i);
     }
   }
+
+  @Test
+  public void toArrayTestLargeSize() {
+    Integer[] array = numberTree.toArray(new Integer[numberTree.size() + 1]);
+    int size = DEFAULT_TEST_SIZE;
+    assertEquals(array.length, numberTree.size() + 1);
+    for (Object i : array) {
+      if (size > 0) {
+        assertEquals(--size, i);
+      }
+    }
+  }
+
 }
