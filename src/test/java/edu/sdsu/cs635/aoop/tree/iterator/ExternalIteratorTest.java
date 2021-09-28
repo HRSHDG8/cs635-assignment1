@@ -1,8 +1,8 @@
-package edu.sdsu.cs635.tree.iterator;
+package edu.sdsu.cs635.aoop.tree.iterator;
 
-import edu.sdsu.cs635.model.Student;
-import edu.sdsu.cs635.tree.BTree;
-import edu.sdsu.cs635.tree.SortedSetTree;
+import edu.sdsu.cs635.aoop.model.Student;
+import edu.sdsu.cs635.aoop.tree.BTree;
+import edu.sdsu.cs635.aoop.tree.SortedSetTree;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

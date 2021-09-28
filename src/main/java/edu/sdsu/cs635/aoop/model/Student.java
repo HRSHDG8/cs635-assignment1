@@ -1,4 +1,4 @@
-package edu.sdsu.cs635.model;
+package edu.sdsu.cs635.aoop.model;
 
 /**
  * Student class holds vital information pertaining to a student.

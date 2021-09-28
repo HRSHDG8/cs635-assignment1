@@ -1,4 +1,4 @@
-package edu.sdsu.cs635.tree;
+package edu.sdsu.cs635.aoop.tree;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -140,7 +140,7 @@ public class BTree<E> implements SortedSetTree<E> {
   public boolean containsAll(Collection<?> c) {
     boolean containsValue = true;
     for (Object a : c) {
-      containsValue &= this.contains(a);
+      containsValue &= contains(a);
     }
     return containsValue;
   }
