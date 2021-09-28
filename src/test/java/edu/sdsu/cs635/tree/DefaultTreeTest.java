@@ -7,8 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DefaultTreeTest {
   private static final int DEFAULT_TEST_SIZE = 10;
@@ -52,6 +51,16 @@ public class DefaultTreeTest {
     List<Integer> elementsToBeAdded = Arrays.asList(-2, -10, 6, 34, 2, -9);
     numberTree.addAll(elementsToBeAdded);
     assertEquals(-10, numberTree.get(0));
+  }
+
+  @Test
+  public void containsAllTest() {
+    assertTrue(numberTree.containsAll(Arrays.asList(2, 3)));
+  }
+
+  @Test
+  public void doesntContainAllTest() {
+    assertFalse(numberTree.containsAll(Arrays.asList(2, 11)));
   }
 
 }

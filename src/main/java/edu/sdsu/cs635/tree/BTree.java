@@ -132,8 +132,8 @@ public class BTree<E> implements SortedSetTree<E> {
   @Override
   public boolean containsAll(Collection<?> c) {
     boolean containsValue = true;
-    for (E e : this) {
-      containsValue &= c.contains(e);
+    for (Object a : c) {
+      containsValue &= this.contains(a);
     }
     return containsValue;
   }
@@ -206,6 +206,7 @@ public class BTree<E> implements SortedSetTree<E> {
   //end java.util.SortedSet Api Methods
 
   //edu.sdsu.cs635.SortedSetTree Api Methods
+
   @Override
   public E get(int index) throws IndexOutOfBoundsException {
     if (!isIndexOutOfBound(index)) {
@@ -217,6 +218,7 @@ public class BTree<E> implements SortedSetTree<E> {
     }
     throw new IndexOutOfBoundsException("Index " + index + " is out of bounds");
   }
+
   //end edu.sdsu.cs635.SortedSetTree Api Methods
 
   //private methods
