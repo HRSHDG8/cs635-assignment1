@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
- * @param <E>
  * @author HMac 825027067
  * Implementation of {@link SortedSetTree} which extends {@link SortedSet} from {@link Collection} framework
  * The Default order of the tree is 3 and the default comparison strategy is of Natural Order (From the {@link Comparator} framewrok)
