@@ -125,9 +125,27 @@ public class BTree<E> implements SortedSetTree<E> {
 
   @Override
   public void forEach(Consumer<? super E> acceptor) {
-    Iterator<E> reverseIterator = new ReverseOrderTreeIterator();
-    while (reverseIterator.hasNext()) {
-      acceptor.accept(reverseIterator.next());
+    reverseOrder(root, acceptor);
+  }
+
+  private void reverseOrder(Node currentNode, Consumer<? super E> acceptor) {
+    for (int i = currentNode.size() - 1; i >= 0; i--) {
+      //start from the right most child until you reach the leaf node.
+      Node child = currentNode.getChild(i + 1);
+      if (child != null) {
+        reverseOrder(child, acceptor);
+      }
+      //once you reach the leaf check predicate and accept the print function on currentStudent
+      E value = currentNode.get(i);
+      acceptor.accept(value);
+
+    }
+    //for every non leaf node, call reverseOrder for the first Child Node of the current Node
+    if (!currentNode.isLeaf()) {
+      Node firstNode = currentNode.getChild(0);
+      if (firstNode != null) {
+        reverseOrder(firstNode, acceptor);
+      }
     }
   }
 
@@ -202,12 +220,11 @@ public class BTree<E> implements SortedSetTree<E> {
 
   @Override
   public E last() {
-    Iterator<E> inOrderIterator = new ReverseOrderTreeIterator();
-    if (inOrderIterator.hasNext()) {
-      return inOrderIterator.next();
-    } else {
-      return null;
+    E last = null;
+    for (E element : this) {
+      last = element;
     }
+    return last;
   }
 
   //end java.util.SortedSet Api Methods
@@ -358,14 +375,11 @@ public class BTree<E> implements SortedSetTree<E> {
 
   //end private methods
 
-  //TreeIterator Abstraction, has common code for iterator and reverse iterator
-
   /**
-   * Common Abstraction to implement Iterator and ReverseIterator.
-   * Has common logic and data abstracted needed to implement an Iterator for {@link BTree}
-   * A stack to store the nodes in line for access, a final function that checks if tree has been modified after iterator was created.
+   * Inorder implementation to support iterator interface on the {@link BTree} class.
+   * The implementation banks on A stack that has the current Node under traversal and what element of the node is to be accessed next.
    */
-  abstract class TreeIterator implements Iterator<E> {
+  class InOrderTreeIterator implements Iterator<E> {
     // index of next element to return
     int cursor;
     // This field is to keep a copy of the expected modification count of the BTree in this case its the size.
@@ -388,13 +402,6 @@ public class BTree<E> implements SortedSetTree<E> {
         this.startIndex = startIndex;
       }
     }
-  }
-
-  /**
-   * Inorder implementation to support iterator interface on the {@link BTree} class.
-   * The implementation banks on A stack that has the current Node under traversal and what element of the node is to be accessed next.
-   */
-  class InOrderTreeIterator extends TreeIterator {
 
     public InOrderTreeIterator() {
       // Create a stack to maintain the current node under traversal and the index to start traversing the value from.
@@ -436,56 +443,6 @@ public class BTree<E> implements SortedSetTree<E> {
           recursionStack.push(new NodeIndexEntry(child, 0));
           if (value != null) {
             cursor++;
-            return value;
-          }
-        }
-      }
-      throw new IndexOutOfBoundsException("No more elements in tree, check hasNext before calling next");
-    }
-  }
-
-  class ReverseOrderTreeIterator extends TreeIterator {
-
-    public ReverseOrderTreeIterator() {
-      // Create a stack to maintain the current node under traversal and the index to start traversing the value from.
-      recursionStack = new Stack<>();
-      expectedModCount = size;
-      cursor = size - 1;
-      //start from the root node and 0th index.
-      recursionStack.push(new NodeIndexEntry(root, root.size() - 1));
-    }
-
-    @Override
-    public boolean hasNext() {
-      return cursor >= 0;
-    }
-
-    @Override
-    public E next() {
-      checkForCoModification();
-      while (!recursionStack.isEmpty() && !isEmpty()) {
-        NodeIndexEntry entry = recursionStack.pop();
-        Node currentNode = entry.node;
-        int currentIndex = entry.startIndex;
-        if (currentNode.isLeaf()) {
-          E value = currentNode.get(currentIndex);
-          cursor--;
-          if (currentIndex > 0) {
-            recursionStack.push(new NodeIndexEntry(currentNode, currentIndex - 1));
-          }
-          return value;
-        } else {
-          E value = null;
-          if (currentIndex < currentNode.size() - 1) {
-            value = currentNode.get(currentIndex + 1);
-          }
-          if (currentIndex >= 0) {
-            recursionStack.push(new NodeIndexEntry(currentNode, currentIndex - 1));
-          }
-          Node child = currentNode.getChild(currentIndex + 1);
-          recursionStack.push(new NodeIndexEntry(child, child.size() - 1));
-          if (value != null) {
-            cursor--;
             return value;
           }
         }
