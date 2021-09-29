@@ -4,11 +4,11 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
+ * @param <E>
+ * @author HMac 825027067
  * Implementation of {@link SortedSetTree} which extends {@link SortedSet} from {@link Collection} framework
  * The Default order of the tree is 3 and the default comparison strategy is of Natural Order (From the {@link Comparator} framewrok)
  * Any class that implements {@link Comparable} can create a {@link BTree} without passing a comparison Strategy.
- *
- * @param <E>
  */
 public class BTree<E> implements SortedSetTree<E> {
   private static final int DEFAULT_ORDER = 3;
@@ -130,6 +130,12 @@ public class BTree<E> implements SortedSetTree<E> {
     reverseOrder(root, acceptor);
   }
 
+  /**
+   * Internal iterator implementation to support forEach Method to iterate over the {@link BTree} in reverse order.
+   *
+   * @param currentNode is the node under recursion
+   * @param acceptor    is the {@link Consumer} passed by the client
+   */
   private void reverseOrder(Node currentNode, Consumer<? super E> acceptor) {
     for (int i = currentNode.size() - 1; i >= 0; i--) {
       //start from the right most child until you reach the leaf node.
@@ -335,7 +341,6 @@ public class BTree<E> implements SortedSetTree<E> {
     if (shouldCreateNewRoot) {
       Node newRoot = new DataNode(new NullNode(), medianValue);
       nodeUnderSplit.setParent(newRoot);
-      //repoint BTrees' root to the newly created root node
       root = newRoot;
       nodeUnderSplit = root;
       nodeUnderSplit.addChild(left);
@@ -361,17 +366,17 @@ public class BTree<E> implements SortedSetTree<E> {
    * @return a new node which can be attached to the parent.
    */
   private Node getNodeValuesAndChildrenInRange(Node nodeToBeSplit, int startIndex, int valueEndIndex, int childEndIndex) {
-    Node splitBTreeNode = new DataNode(new NullNode());
+    Node replacementNode = new DataNode(new NullNode());
     for (int i = startIndex; i <= valueEndIndex; i++) {
-      splitBTreeNode.add(nodeToBeSplit.get(i));
+      replacementNode.add(nodeToBeSplit.get(i));
     }
     if (nodeToBeSplit.childrenSize() > 0) {
       for (int j = startIndex; j <= childEndIndex; j++) {
         Node childBTreeNode = nodeToBeSplit.getChild(j);
-        splitBTreeNode.addChild(childBTreeNode);
+        replacementNode.addChild(childBTreeNode);
       }
     }
-    return splitBTreeNode;
+    return replacementNode;
   }
 
   //end private methods
@@ -584,7 +589,7 @@ public class BTree<E> implements SortedSetTree<E> {
     }
 
     /**
-     * @param child removes child {@link Node}, within the current node only, after spilt and balance happens
+     * @param child removes old child {@link Node}, within the current node only, after spilt and balance happens
      */
     boolean removeChild(Node child) {
       if (isLeaf()) {
