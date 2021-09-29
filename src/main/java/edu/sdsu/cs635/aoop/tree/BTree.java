@@ -99,7 +99,9 @@ public class BTree<E> implements SortedSetTree<E> {
     assert value != null;
     increaseSize();
     //base condition to insert the very first value
+    //null object pattern helps here to avoid == null checks
     if (root.isNull()) {
+      // as per null object pattern pass a NullNode as parent of root, rather than null.
       root = new DataNode(new NullNode(), value);
     } else {
       Node currentBTreeNode = root;
@@ -135,7 +137,6 @@ public class BTree<E> implements SortedSetTree<E> {
       if (child != null) {
         reverseOrder(child, acceptor);
       }
-      //once you reach the leaf check predicate and accept the print function on currentStudent
       E value = currentNode.get(i);
       acceptor.accept(value);
 
@@ -451,6 +452,9 @@ public class BTree<E> implements SortedSetTree<E> {
     }
   }
 
+  /**
+   * Abstraction for a tree node, provides common methods and fields for underlying implementation to use
+   */
   abstract class Node {
     List<E> values;
     List<Node> children;
@@ -606,7 +610,10 @@ public class BTree<E> implements SortedSetTree<E> {
     }
   }
 
-  // Null Object Pattern Implementation for the Node abstraction
+  /**
+   * Null Object Pattern Implementation for {@link Node} Abstraction, this class will not hold any information.
+   * this replaces null objects insertion in tree and its subsequent null checks.
+   */
   private class NullNode extends Node {
     @Override
     Node getParent() {
