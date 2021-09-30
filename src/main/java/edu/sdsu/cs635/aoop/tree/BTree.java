@@ -95,6 +95,7 @@ public class BTree<E> implements SortedSetTree<E> {
 
   @Override
   public String toString() {
+    // use the nodes toString method to bank on the toString Logic for the entire Tree
     return root.toString();
   }
 
@@ -132,32 +133,6 @@ public class BTree<E> implements SortedSetTree<E> {
   @Override
   public void forEach(Consumer<? super E> acceptor) {
     reverseOrder(root, acceptor);
-  }
-
-  /**
-   * Internal iterator implementation to support forEach Method to iterate over the {@link BTree} in reverse order.
-   *
-   * @param currentNode is the node under recursion
-   * @param acceptor    is the {@link Consumer} passed by the client
-   */
-  private void reverseOrder(Node currentNode, Consumer<? super E> acceptor) {
-    for (int i = currentNode.size() - 1; i >= 0; i--) {
-      //start from the right most child until you reach the leaf node.
-      Node child = currentNode.getChild(i + 1);
-      if (child != null) {
-        reverseOrder(child, acceptor);
-      }
-      E value = currentNode.get(i);
-      acceptor.accept(value);
-
-    }
-    //for every non leaf node, call reverseOrder for the first Child Node of the current Node
-    if (!currentNode.isLeaf()) {
-      Node firstNode = currentNode.getChild(0);
-      if (firstNode != null) {
-        reverseOrder(firstNode, acceptor);
-      }
-    }
   }
 
   @Override
@@ -383,6 +358,33 @@ public class BTree<E> implements SortedSetTree<E> {
     return replacementNode;
   }
 
+
+  /**
+   * Internal iterator implementation to support forEach Method to iterate over the {@link BTree} in reverse order.
+   *
+   * @param currentNode is the node under recursion
+   * @param acceptor    is the {@link Consumer} passed by the client
+   */
+  private void reverseOrder(Node currentNode, Consumer<? super E> acceptor) {
+    for (int i = currentNode.size() - 1; i >= 0; i--) {
+      //start from the right most child until you reach the leaf node.
+      Node child = currentNode.getChild(i + 1);
+      if (child != null) {
+        reverseOrder(child, acceptor);
+      }
+      E value = currentNode.get(i);
+      acceptor.accept(value);
+
+    }
+    //for every non leaf node, call reverseOrder for the first Child Node of the current Node
+    if (!currentNode.isLeaf()) {
+      Node firstNode = currentNode.getChild(0);
+      if (firstNode != null) {
+        reverseOrder(firstNode, acceptor);
+      }
+    }
+  }
+
   //end private methods
 
   /**
@@ -540,6 +542,7 @@ public class BTree<E> implements SortedSetTree<E> {
       this.childNodeComparator = Comparator.nullsLast((o1, o2) -> comparisonStrategy.compare(o1.get(0), o2.get(0)));
     }
 
+    @Override
     Node getParent() {
       return parent;
     }
@@ -547,6 +550,7 @@ public class BTree<E> implements SortedSetTree<E> {
     /**
      * @param parent sets a parent node to the current node
      */
+    @Override
     void setParent(Node parent) {
       this.parent = parent;
     }
@@ -557,6 +561,7 @@ public class BTree<E> implements SortedSetTree<E> {
      * @param index integer value to retrieve value from
      * @return a {@link E} at index in the current node.
      */
+    @Override
     E get(int index) {
       return values.get(index);
     }
@@ -567,6 +572,7 @@ public class BTree<E> implements SortedSetTree<E> {
      *
      * @param value a {@link E} object to be added to the current node
      */
+    @Override
     boolean add(E value) {
       E isSet = values.set(size++, value);
       values.sort(comparisonStrategy);
@@ -577,6 +583,7 @@ public class BTree<E> implements SortedSetTree<E> {
      * @param index int value to retrieve node from
      * @return a child node at index
      */
+    @Override
     Node getChild(int index) {
       return children.get(index);
     }
@@ -587,6 +594,7 @@ public class BTree<E> implements SortedSetTree<E> {
      *
      * @param child a child {@link Node} to be added to the current node
      */
+    @Override
     boolean addChild(Node child) {
       child.parent = this;
       Node setValue = children.set(childrenSize++, child);
@@ -597,6 +605,7 @@ public class BTree<E> implements SortedSetTree<E> {
     /**
      * @param child removes old child {@link Node}, within the current node only, after spilt and balance happens
      */
+    @Override
     boolean removeChild(Node child) {
       if (isLeaf()) {
         return false;
