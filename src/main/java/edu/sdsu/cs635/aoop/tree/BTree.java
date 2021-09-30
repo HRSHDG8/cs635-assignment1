@@ -597,9 +597,9 @@ public class BTree<E> implements SortedSetTree<E> {
     @Override
     boolean addChild(Node child) {
       child.parent = this;
-      Node setValue = children.set(childrenSize++, child);
+      Node addedValue = children.set(childrenSize++, child);
       children.sort(childNodeComparator);
-      return !setValue.isNull();
+      return !addedValue.isNull();
     }
 
     /**
