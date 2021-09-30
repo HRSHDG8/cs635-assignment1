@@ -71,4 +71,10 @@ public class StudentUseCases {
   public void getStudentAtIndexException() {
     assertThrows(IndexOutOfBoundsException.class, () -> studentTree.get(studentTree.size()));
   }
+
+  // This is not an actual test it's just for debugging purpose to see how the tree looks visually.
+  @Test
+  public void toStringTest() {
+    System.out.println(studentTree);
+  }
 }

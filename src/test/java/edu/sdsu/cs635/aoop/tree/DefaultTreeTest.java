@@ -18,7 +18,9 @@ public class DefaultTreeTest {
   @BeforeEach
   public void init() {
     numberTree = new BTree<>();
-    IntStream.range(0, DEFAULT_TEST_SIZE).forEach(numberTree::add);
+    IntStream
+       .range(0, DEFAULT_TEST_SIZE)
+       .forEach(numberTree::add);
   }
 
   @Test
@@ -105,5 +107,13 @@ public class DefaultTreeTest {
     assertThrows(IndexOutOfBoundsException.class, () -> numberTree.iterator().next());
   }
 
+  // This is not an actual test it's just for debugging purpose to see how the tree looks visually.
+  @Test
+  public void toStringTest() {
+    IntStream
+       .range(DEFAULT_TEST_SIZE, DEFAULT_TEST_SIZE * 2)
+       .forEach(numberTree::add);
+    System.out.println(numberTree);
+  }
 
 }

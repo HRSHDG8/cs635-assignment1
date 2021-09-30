@@ -94,6 +94,11 @@ public class BTree<E> implements SortedSetTree<E> {
   }
 
   @Override
+  public String toString() {
+    return root.toString();
+  }
+
+  @Override
   public boolean add(E value) {
     assert value != null;
     increaseSize();
@@ -483,6 +488,8 @@ public class BTree<E> implements SortedSetTree<E> {
 
     abstract boolean isNull();
 
+    abstract String toString(String prefix);
+
     /**
      * @return no of non-null elements in current node
      */
@@ -612,6 +619,29 @@ public class BTree<E> implements SortedSetTree<E> {
     boolean isNull() {
       return false;
     }
+
+    @Override
+    String toString(String prefix) {
+      StringBuilder nodeAsString = new StringBuilder(prefix);
+      for (int i = 0; i < this.size(); i++) {
+        if (i != this.size - 1) {
+          nodeAsString.append(" | ").append(values.get(i));
+        } else {
+          nodeAsString.append(" | ").append(values.get(i)).append(" | ");
+        }
+      }
+      nodeAsString.append("\n");
+      for (int i = 0; i < this.childrenSize(); i++) {
+        //add tab for each level going down
+        nodeAsString.append(children.get(i).toString(prefix + "\t"));
+      }
+      return nodeAsString.toString();
+    }
+
+    @Override
+    public String toString() {
+      return toString("");
+    }
   }
 
   /**
@@ -658,5 +688,12 @@ public class BTree<E> implements SortedSetTree<E> {
     boolean isNull() {
       return true;
     }
+
+    @Override
+    String toString(String prefix) {
+      return "";
+    }
+
+
   }
 }
