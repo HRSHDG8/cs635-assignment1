@@ -17,7 +17,7 @@ public class GpaOrderingStrategy {
 
   @BeforeEach
   public void init() {
-    studentTree = new BTree<>(3, GPA_ORDERING_STRATEGY);
+    studentTree = new BTree<>(GPA_ORDERING_STRATEGY);
     studentTree.add(new Student(825000001L, "Alex", 3.9));
     studentTree.add(new Student(825000002L, "Jack", 3.8));
     studentTree.add(new Student(825000003L, "Marrissa", 3.4));

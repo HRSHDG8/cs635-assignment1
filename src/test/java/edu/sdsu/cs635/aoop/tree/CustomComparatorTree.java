@@ -3,6 +3,7 @@ package edu.sdsu.cs635.aoop.tree;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
@@ -14,11 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class CustomComparatorTree {
   private static final int DEFAULT_TEST_SIZE = 10;
   private SortedSetTree<Integer> numberTree = null;
+  private static final Comparator<Integer> REVERSE_INTEGER_STRATEGY = Comparator.reverseOrder();
 
   @BeforeEach
   public void init() {
     //Strategy for sorting integers in reverse order
-    numberTree = new BTree<>((i1, i2) -> i2 - i1);
+    numberTree = new BTree<>(REVERSE_INTEGER_STRATEGY);
     IntStream.range(0, DEFAULT_TEST_SIZE).forEach(numberTree::add);
   }
 

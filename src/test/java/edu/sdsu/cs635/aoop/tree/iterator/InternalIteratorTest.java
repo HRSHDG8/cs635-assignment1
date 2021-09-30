@@ -16,7 +16,7 @@ public class InternalIteratorTest {
 
   @BeforeEach
   public void init() {
-    studentTree = new BTree<>(3, Comparator.comparing(student -> student.getName().toLowerCase()));
+    studentTree = new BTree<>(Comparator.comparing(student -> student.getName().toLowerCase()));
     studentTree.add(new Student(825000001L, "Alex", 3.9));
     studentTree.add(new Student(825000002L, "Jack", 3.8));
     studentTree.add(new Student(825000003L, "Marrissa", 3.4));
