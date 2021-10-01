@@ -20,7 +20,7 @@ public class BTree<E> implements SortedSetTree<E> {
   private Node root;
   private int size;
 
-  //Constructor Declarations
+  // Start Constructor Declarations
   public BTree() {
     this(DEFAULT_ORDER);
   }
@@ -41,9 +41,9 @@ public class BTree<E> implements SortedSetTree<E> {
     // comparing with the strategy passed by API consumer and make it null tolerant with Comparator.nullsLast
     this.comparisonStrategy = Comparator.nullsLast(strategy);
   }
-  //End Constructor Declarations
+  // End Constructor Declarations
 
-  //java.util.Set Api Methods
+  // Start java.util.Set Api Methods
   @Override
   public int size() {
     return size;
@@ -168,9 +168,9 @@ public class BTree<E> implements SortedSetTree<E> {
     size = 0;
     root = new NullNode();
   }
-  //End java.util.Set API Methods
+  // End java.util.Set API Methods
 
-  //java.util.SortedSet Api Methods
+  // Start java.util.SortedSet Api Methods
   @Override
   public Comparator<? super E> comparator() {
     return comparisonStrategy;
@@ -210,9 +210,9 @@ public class BTree<E> implements SortedSetTree<E> {
     return last;
   }
 
-  //end java.util.SortedSet Api Methods
+  // End java.util.SortedSet Api Methods
 
-  //edu.sdsu.cs635.SortedSetTree Api Methods
+  // Start edu.sdsu.cs635.SortedSetTree Api Methods
 
   @Override
   public E get(int index) throws IndexOutOfBoundsException {
@@ -227,7 +227,7 @@ public class BTree<E> implements SortedSetTree<E> {
     throw new IndexOutOfBoundsException("Index " + index + " is out of bounds");
   }
 
-  //end edu.sdsu.cs635.SortedSetTree Api Methods
+  // End edu.sdsu.cs635.SortedSetTree Api Methods
 
   // Object class methods
 
@@ -237,9 +237,9 @@ public class BTree<E> implements SortedSetTree<E> {
     return root.toString();
   }
 
-  //end Object class methods
+  // End Object class methods
 
-  //private methods
+  // Start Private methods
 
   private void increaseSize() {
     this.size++;
@@ -387,7 +387,9 @@ public class BTree<E> implements SortedSetTree<E> {
     }
   }
 
-  //end private methods
+  // End private methods
+
+  // Start External Iterator Class
 
   /**
    * Inorder implementation to support iterator interface on the {@link BTree} class.
@@ -455,6 +457,11 @@ public class BTree<E> implements SortedSetTree<E> {
     }
   }
 
+  // End External Iterator Class
+
+  // Start Node Related Classes
+  // Start Abstract Node
+
   /**
    * Abstraction for a tree node, provides common methods and fields for underlying implementation to use
    */
@@ -500,6 +507,8 @@ public class BTree<E> implements SortedSetTree<E> {
       return childrenSize == 0;
     }
   }
+  // End Abstract Node
+  // Start Data Node
 
   /**
    * A node for the {@link BTree} class
@@ -637,6 +646,8 @@ public class BTree<E> implements SortedSetTree<E> {
       return nodeAsString.toString();
     }
   }
+  // End DataNode
+  // Start Null Node
 
   /**
    * Null Object Pattern Implementation for {@link Node} Abstraction, this class will not hold any information.
@@ -688,4 +699,6 @@ public class BTree<E> implements SortedSetTree<E> {
       return "";
     }
   }
+  // End Null Node
+  // End Node Related Classes
 }
