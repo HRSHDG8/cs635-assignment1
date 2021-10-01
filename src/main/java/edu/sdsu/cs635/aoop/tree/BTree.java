@@ -94,12 +94,6 @@ public class BTree<E> implements SortedSetTree<E> {
   }
 
   @Override
-  public String toString() {
-    // use the nodes toString method to bank on the toString Logic for the entire Tree
-    return root.toString();
-  }
-
-  @Override
   public boolean add(E value) {
     assert value != null;
     increaseSize();
@@ -231,6 +225,16 @@ public class BTree<E> implements SortedSetTree<E> {
   }
 
   //end edu.sdsu.cs635.SortedSetTree Api Methods
+
+  // Object class methods
+
+  @Override
+  public String toString() {
+    // use the nodes toString method to bank on the toString Logic for the entire Tree
+    return root.toString();
+  }
+
+  //end Object class methods
 
   //private methods
 
@@ -369,9 +373,7 @@ public class BTree<E> implements SortedSetTree<E> {
     for (int i = currentNode.size() - 1; i >= 0; i--) {
       //start from the right most child until you reach the leaf node.
       Node child = currentNode.getChild(i + 1);
-      if (child != null) {
-        reverseOrder(child, acceptor);
-      }
+      reverseOrder(child, acceptor);
       E value = currentNode.get(i);
       acceptor.accept(value);
 
@@ -379,9 +381,7 @@ public class BTree<E> implements SortedSetTree<E> {
     //for every non leaf node, call reverseOrder for the first Child Node of the current Node
     if (!currentNode.isLeaf()) {
       Node firstNode = currentNode.getChild(0);
-      if (firstNode != null) {
-        reverseOrder(firstNode, acceptor);
-      }
+      reverseOrder(firstNode, acceptor);
     }
   }
 
@@ -489,8 +489,6 @@ public class BTree<E> implements SortedSetTree<E> {
     abstract boolean removeChild(Node child);
 
     abstract boolean isNull();
-
-    abstract String toString(String prefix);
 
     /**
      * @return no of non-null elements in current node
@@ -630,26 +628,21 @@ public class BTree<E> implements SortedSetTree<E> {
     }
 
     @Override
-    String toString(String prefix) {
-      StringBuilder nodeAsString = new StringBuilder(prefix);
+    public String toString() {
+      StringBuilder nodeAsString = new StringBuilder();
       for (int i = 0; i < this.size(); i++) {
-        if (i != this.size - 1) {
-          nodeAsString.append(" | ").append(values.get(i));
-        } else {
-          nodeAsString.append(" | ").append(values.get(i)).append(" | ");
-        }
+        //start from the left most child until you reach the leaf node.
+        Node child = this.getChild(i);
+        nodeAsString.append(child.toString()).append("\n");
+        E value = this.get(i);
+        nodeAsString.append(value.toString());
       }
-      nodeAsString.append("\n");
-      for (int i = 0; i < this.childrenSize(); i++) {
-        //add tab for each level going down
-        nodeAsString.append(children.get(i).toString(prefix + "\t"));
+      //for every non leaf node, call inOrder for the last Child Node of the current Node
+      if (!this.isLeaf()) {
+        Node lastNode = this.getChild(this.childrenSize() - 1);
+        nodeAsString.append(lastNode.toString());
       }
       return nodeAsString.toString();
-    }
-
-    @Override
-    public String toString() {
-      return toString("");
     }
   }
 
@@ -699,7 +692,7 @@ public class BTree<E> implements SortedSetTree<E> {
     }
 
     @Override
-    String toString(String prefix) {
+    public String toString() {
       return "";
     }
 
