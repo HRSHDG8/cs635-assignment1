@@ -396,7 +396,7 @@ public class BTree<E> implements SortedSetTree<E> {
     int cursor;
     // This field is to keep a copy of the expected modification count of the BTree in this case its the size.
     // the logic works with tree since we don't have a remove function and tree size can not decrease.
-    // TODO implement modCount logic on tree if time permits and use that to check for modification
+    // implement modCount logic on tree in next release and use that to check for modification
     int expectedModCount;
     Stack<NodeIndexEntry> recursionStack;
 
@@ -702,7 +702,6 @@ public class BTree<E> implements SortedSetTree<E> {
     String toString(String prefix) {
       return "";
     }
-
 
   }
 }
