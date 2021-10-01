@@ -376,7 +376,6 @@ public class BTree<E> implements SortedSetTree<E> {
       reverseOrder(child, acceptor);
       E value = currentNode.get(i);
       acceptor.accept(value);
-
     }
     //for every non leaf node, call reverseOrder for the first Child Node of the current Node
     if (!currentNode.isLeaf()) {
@@ -436,6 +435,10 @@ public class BTree<E> implements SortedSetTree<E> {
         NodeIndexEntry entry = recursionStack.pop();
         Node currentNode = entry.node;
         int currentIndex = entry.startIndex;
+        //TODO use this to replace struct
+//        Map.Entry<Node, Integer> entry1 = new AbstractMap.SimpleEntry<>(currentNode, currentIndex);
+//        entry1.getKey();
+//        entry1.getValue();
         if (currentNode.isLeaf()) {
           E value = currentNode.get(currentIndex);
           cursor++;
@@ -695,6 +698,5 @@ public class BTree<E> implements SortedSetTree<E> {
     public String toString() {
       return "";
     }
-
   }
 }
