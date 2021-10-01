@@ -3,6 +3,9 @@ package edu.sdsu.cs635.aoop.tree;
 import java.util.*;
 import java.util.function.Consumer;
 
+import static java.util.AbstractMap.SimpleEntry;
+import static java.util.Map.Entry;
+
 /**
  * @author HMac 825027067
  * Implementation of {@link SortedSetTree} which extends {@link SortedSet} from {@link Collection} framework
@@ -397,21 +400,11 @@ public class BTree<E> implements SortedSetTree<E> {
     // the logic works with tree since we don't have a remove function and tree size can not decrease.
     // implement modCount logic on tree in next release and use that to check for modification
     int expectedModCount;
-    Stack<NodeIndexEntry> recursionStack;
+    Stack<Entry<Node, Integer>> recursionStack;
 
     final void checkForCoModification() {
       if (size != expectedModCount)
         throw new ConcurrentModificationException();
-    }
-
-    class NodeIndexEntry {
-      private final Node node;
-      private final int startIndex;
-
-      protected NodeIndexEntry(Node node, int startIndex) {
-        this.node = node;
-        this.startIndex = startIndex;
-      }
     }
 
     public InOrderTreeIterator() {
@@ -420,7 +413,7 @@ public class BTree<E> implements SortedSetTree<E> {
       recursionStack = new Stack<>();
       expectedModCount = size;
       //start from the root node and 0th index.
-      recursionStack.push(new NodeIndexEntry(root, 0));
+      recursionStack.push(new SimpleEntry<>(root, 0));
     }
 
     @Override
@@ -432,18 +425,14 @@ public class BTree<E> implements SortedSetTree<E> {
     public E next() {
       checkForCoModification();
       while (!recursionStack.isEmpty() && !isEmpty()) {
-        NodeIndexEntry entry = recursionStack.pop();
-        Node currentNode = entry.node;
-        int currentIndex = entry.startIndex;
-        //TODO use this to replace struct
-//        Map.Entry<Node, Integer> entry1 = new AbstractMap.SimpleEntry<>(currentNode, currentIndex);
-//        entry1.getKey();
-//        entry1.getValue();
+        Entry<Node, Integer> entry = recursionStack.pop();
+        Node currentNode = entry.getKey();
+        int currentIndex = entry.getValue();
         if (currentNode.isLeaf()) {
           E value = currentNode.get(currentIndex);
           cursor++;
           if (currentIndex < currentNode.size() - 1) {
-            recursionStack.push(new NodeIndexEntry(currentNode, currentIndex + 1));
+            recursionStack.push(new SimpleEntry<>(currentNode, currentIndex + 1));
           }
           return value;
         } else {
@@ -452,10 +441,10 @@ public class BTree<E> implements SortedSetTree<E> {
             value = currentNode.get(currentIndex - 1);
           }
           if (currentIndex < currentNode.size()) {
-            recursionStack.push(new NodeIndexEntry(currentNode, currentIndex + 1));
+            recursionStack.push(new SimpleEntry<>(currentNode, currentIndex + 1));
           }
           Node child = currentNode.getChild(currentIndex);
-          recursionStack.push(new NodeIndexEntry(child, 0));
+          recursionStack.push(new SimpleEntry<>(child, 0));
           if (value != null) {
             cursor++;
             return value;
