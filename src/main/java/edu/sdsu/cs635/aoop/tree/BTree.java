@@ -98,7 +98,9 @@ public class BTree<E> implements SortedSetTree<E> {
 
   @Override
   public boolean add(E value) {
-    assert value != null;
+    if (value == null) {
+      throw new IllegalArgumentException("you cannot add null values to BTree");
+    }
     increaseSize();
     //base condition to insert the very first value
     //null object pattern helps here to avoid == null checks
@@ -402,6 +404,8 @@ public class BTree<E> implements SortedSetTree<E> {
     // the logic works with tree since we don't have a remove function and tree size can not decrease.
     // implement modCount logic on tree in next release and use that to check for modification
     int expectedModCount;
+    // Use Map.Entry to maintain the current index of element being returned,
+    // its use it to just remember a node with the current element being accessed.
     Stack<Entry<Node, Integer>> recursionStack;
 
     final void checkForCoModification() {
@@ -423,6 +427,28 @@ public class BTree<E> implements SortedSetTree<E> {
       return cursor < size;
     }
 
+    /**
+     * The function implements inorder traversal of the BTree using a stack
+     * The logic flows as follows
+     * The stack stores data as pairs of < Node, Index >, where node is the current node under traversal and Index is index if the next value to be returned.
+     * The stack is initialized with root node.
+     * A loop runs until the stack is empty.
+     * Each entry is stack is checked as follows
+     * check if a Node has children
+     * - Yes (Non Leaf Node)
+     * check if Index > 0
+     * assign the value at Index - 1 to a variable
+     * check if Node has more children
+     * Push the Node back in stack with < Node, Index+1 >
+     * check if value to be returned is not null
+     * increment cursor and return value
+     * - No (Leaf Nodes)
+     * assign the value at Index to a variable
+     * check if Node has more children
+     * Push the Node back in stack with < Node, Index+1 >
+     * increment cursor and return value
+     * If the stack is empty or the tree is empty and a next is called without hasNext throw {@link IndexOutOfBoundsException}
+     */
     @Override
     public E next() {
       checkForCoModification();
@@ -433,18 +459,22 @@ public class BTree<E> implements SortedSetTree<E> {
         if (currentNode.isLeaf()) {
           E value = currentNode.get(currentIndex);
           cursor++;
+          // if the current node has more elements, push the same node in stack with the next index to access.
           if (currentIndex < currentNode.size() - 1) {
             recursionStack.push(new SimpleEntry<>(currentNode, currentIndex + 1));
           }
           return value;
         } else {
           E value = null;
+          // if the left child has been visited return the current element in node.
           if (currentIndex > 0) {
             value = currentNode.get(currentIndex - 1);
           }
+          // if the current node has more elements, push the same node in stack with the next index to access.
           if (currentIndex < currentNode.size()) {
             recursionStack.push(new SimpleEntry<>(currentNode, currentIndex + 1));
           }
+          //push the children at index to the stack, so it's available in the next iteration to be traversed.
           Node child = currentNode.getChild(currentIndex);
           recursionStack.push(new SimpleEntry<>(child, 0));
           if (value != null) {
