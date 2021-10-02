@@ -664,6 +664,7 @@ public class BTree<E> implements SortedSetTree<E> {
       for (int i = 0; i < this.size(); i++) {
         //start from the left most child until you reach the leaf node.
         Node child = this.getChild(i);
+        // No need to check if child is null, null object pattern will return empty string for NullObjects
         nodeAsString.append(child.toString()).append("\n");
         E value = this.get(i);
         nodeAsString.append(value.toString());
