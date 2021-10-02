@@ -36,7 +36,7 @@ public class DefaultTreeTest {
 
   @Test
   public void nullAdditionShouldThrowError() {
-    assertThrows(AssertionError.class, () -> numberTree.add(null));
+    assertThrows(IllegalArgumentException.class, () -> numberTree.add(null));
   }
 
   @Test
@@ -59,7 +59,7 @@ public class DefaultTreeTest {
 
   @Test
   public void addElementException() {
-    assertThrows(AssertionError.class, () -> numberTree.add(null));
+    assertThrows(IllegalArgumentException.class, () -> numberTree.add(null));
   }
 
   @Test
