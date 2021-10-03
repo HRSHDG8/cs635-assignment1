@@ -541,7 +541,7 @@ public class BTree<E> implements SortedSetTree<E> {
   // Start Data Node
 
   /**
-   * A node for the {@link BTree} class
+   * A Data node implementation for {@link Node} Abstraction
    * Each node holds a reference to its parent
    * A list of values it currently holds, and its count
    * A list of pointers to the child nodes, and its count
