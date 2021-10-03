@@ -3,10 +3,7 @@ package edu.sdsu.cs635.aoop.tree;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -114,6 +111,21 @@ public class DefaultTreeTest {
        .range(DEFAULT_TEST_SIZE, DEFAULT_TEST_SIZE * 2)
        .forEach(numberTree::add);
     System.out.println(numberTree);
+  }
+
+  @Test
+  public void comparatorTest() {
+    assertEquals(0, numberTree.comparator().compare(1, 1));
+  }
+
+  // These functions are not yet implemented
+  @Test
+  public void trivialTests() {
+    assertTrue(numberTree.subSet(1, 1).isEmpty());
+    assertTrue(numberTree.headSet(1).isEmpty());
+    assertTrue(numberTree.tailSet(1).isEmpty());
+    assertFalse(numberTree.remove(1));
+    assertFalse(numberTree.removeAll(Collections.singletonList(1)));
   }
 
 }
