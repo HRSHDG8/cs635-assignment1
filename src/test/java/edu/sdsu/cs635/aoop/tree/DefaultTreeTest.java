@@ -126,6 +126,7 @@ public class DefaultTreeTest {
     assertTrue(numberTree.tailSet(1).isEmpty());
     assertFalse(numberTree.remove(1));
     assertFalse(numberTree.removeAll(Collections.singletonList(1)));
+    assertFalse(numberTree.retainAll(Collections.singletonList(1)));
   }
 
 }
