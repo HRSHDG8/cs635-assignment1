@@ -46,12 +46,12 @@ public class BTree<E> implements SortedSetTree<E> {
   // Start java.util.Set Api Methods
   @Override
   public int size() {
-    return size;
+    return this.size;
   }
 
   @Override
   public boolean isEmpty() {
-    return size == 0;
+    return this.size == 0;
   }
 
   @Override
@@ -70,29 +70,29 @@ public class BTree<E> implements SortedSetTree<E> {
   }
 
   private boolean isIndexOutOfBound(int index) {
-    return index >= size || index < 0;
+    return index >= this.size || index < 0;
   }
 
   @Override
   public Object[] toArray() {
-    Object[] array = new Object[size];
+    Object[] array = new Object[this.size];
     int i = 0;
     for (E e : this) {
       array[i++] = e;
     }
     // makes sure a deep clone is returned so a change to array does not change the tree.
-    return Arrays.copyOf(array, size);
+    return Arrays.copyOf(array, this.size);
   }
 
   @Override
   @SuppressWarnings("unchecked")
   public <T> T[] toArray(T[] a) {
-    if (a.length < size)
+    if (a.length < this.size)
       // Make a new array of a's runtime type, but my contents:
-      return (T[]) Arrays.copyOf(toArray(), size, a.getClass());
-    System.arraycopy(toArray(), 0, a, 0, size);
-    if (a.length > size)
-      a[size] = null;
+      return (T[]) Arrays.copyOf(toArray(), this.size, a.getClass());
+    System.arraycopy(toArray(), 0, a, 0, this.size);
+    if (a.length > this.size)
+      a[this.size] = null;
     return a;
   }
 
@@ -104,9 +104,9 @@ public class BTree<E> implements SortedSetTree<E> {
     increaseSize();
     //base condition to insert the very first value
     //null object pattern helps here to avoid == null checks
-    if (root.isNull()) {
+    if (this.root.isNull()) {
       // as per null object pattern pass a NullNode as parent of root, rather than null.
-      root = new DataNode(new NullNode(), value);
+      this.root = new DataNode(new NullNode(), value);
     } else {
       Node currentBTreeNode = root;
       while (!currentBTreeNode.isNull()) {
@@ -131,7 +131,7 @@ public class BTree<E> implements SortedSetTree<E> {
 
   @Override
   public void forEach(Consumer<? super E> acceptor) {
-    reverseOrder(root, acceptor);
+    reverseOrder(this.root, acceptor);
   }
 
   @Override
@@ -152,7 +152,7 @@ public class BTree<E> implements SortedSetTree<E> {
   public boolean addAll(Collection<? extends E> c) {
     int oldSize = size();
     c.forEach(this::add);
-    return oldSize + c.size() == size;
+    return oldSize + c.size() == this.size;
   }
 
   @Override
@@ -167,15 +167,15 @@ public class BTree<E> implements SortedSetTree<E> {
 
   @Override
   public void clear() {
-    size = 0;
-    root = new NullNode();
+    this.size = 0;
+    this.root = new NullNode();
   }
   // End java.util.Set API Methods
 
   // Start java.util.SortedSet Api Methods
   @Override
   public Comparator<? super E> comparator() {
-    return comparisonStrategy;
+    return this.comparisonStrategy;
   }
 
   @Override
@@ -236,7 +236,7 @@ public class BTree<E> implements SortedSetTree<E> {
   @Override
   public String toString() {
     // use the nodes toString method to bank on the toString Logic for the entire Tree
-    return root.toString();
+    return this.root.toString();
   }
 
   // End Object class methods
@@ -252,7 +252,7 @@ public class BTree<E> implements SortedSetTree<E> {
     int indexOfLastElement = node.size() - 1;
     Node rightBTreeNode = new NullNode();
     E highestComparableValue = node.get(indexOfLastElement);
-    if (comparisonStrategy.compare(value, highestComparableValue) > 0) {
+    if (this.comparisonStrategy.compare(value, highestComparableValue) > 0) {
       rightBTreeNode = node.getChild(node.size());
     }
     return rightBTreeNode;
@@ -262,7 +262,7 @@ public class BTree<E> implements SortedSetTree<E> {
     //For BTree the lowest possible value in a node is the first value and the lowest possible child node is the left most node
     E lowestComparableValue = node.get(0);
     Node leftBTreeNode = new NullNode();
-    if (comparisonStrategy.compare(value, lowestComparableValue) <= 0) {
+    if (this.comparisonStrategy.compare(value, lowestComparableValue) <= 0) {
       leftBTreeNode = node.getChild(0);
     }
     return leftBTreeNode;
@@ -274,9 +274,9 @@ public class BTree<E> implements SortedSetTree<E> {
    * @return true if a value was added in current node, else returns false.
    */
   private boolean checkAndInsertInCurrentNode(Node currentNode, E valueToBeAdded) {
-    if (currentNode.childrenSize() == 0) {
+    if (currentNode.isLeaf()) {
       currentNode.add(valueToBeAdded);
-      if (currentNode.size() <= maximumValuesInNode) {
+      if (currentNode.size() <= this.maximumValuesInNode) {
         return true;
       }
       splitAndBalance(currentNode);
@@ -290,7 +290,8 @@ public class BTree<E> implements SortedSetTree<E> {
     for (int i = 1; i < parentNode.size(); i++) {
       E previousValue = parentNode.get(i - 1);
       E nextValue = parentNode.get(i);
-      if (comparisonStrategy.compare(value, previousValue) > 0 && comparisonStrategy.compare(value, nextValue) <= 0) {
+      if (this.comparisonStrategy.compare(value, previousValue) > 0 &&
+         this.comparisonStrategy.compare(value, nextValue) <= 0) {
         medianBTreeNode = parentNode.getChild(i);
         break;
       }
@@ -303,7 +304,7 @@ public class BTree<E> implements SortedSetTree<E> {
    * The strategy is to create a median node as parent,
    * a left node for all left values and child nodes,
    * a right node for all right values and child nodes,
-   * Then insert the median node at appropriate position, the old overflow node is Garbage collected.
+   * Then insert the median node at appropriate position, the old overflown node is Garbage collected.
    *
    * @param node split the current node and balance the tree
    */
@@ -329,8 +330,8 @@ public class BTree<E> implements SortedSetTree<E> {
     if (shouldCreateNewRoot) {
       Node newRoot = new DataNode(new NullNode(), medianValue);
       nodeUnderSplit.setParent(newRoot);
-      root = newRoot;
-      nodeUnderSplit = root;
+      this.root = newRoot;
+      nodeUnderSplit = this.root;
       nodeUnderSplit.addChild(left);
       nodeUnderSplit.addChild(right);
     } else {
@@ -340,7 +341,7 @@ public class BTree<E> implements SortedSetTree<E> {
       parent.addChild(left);
       parent.addChild(right);
       // if the parent overflows or is unbalanced, apply split and balance on it.
-      if (parent.size() > maximumValuesInNode) {
+      if (parent.size() > this.maximumValuesInNode) {
         splitAndBalance(parent);
       }
     }
@@ -406,25 +407,25 @@ public class BTree<E> implements SortedSetTree<E> {
     int expectedModCount;
     // Use Map.Entry to maintain the current index of element being returned,
     // its use it to just remember a node with the current element being accessed.
-    Stack<Entry<Node, Integer>> recursionStack;
-
-    final void checkForCoModification() {
-      if (size != expectedModCount)
-        throw new ConcurrentModificationException();
-    }
+    Stack<Entry<Node, Integer>> traversalStack;
 
     public InOrderTreeIterator() {
       // Create a stack to maintain the current node under traversal and the index to start traversing the value from.
-      cursor = 0;
-      recursionStack = new Stack<>();
-      expectedModCount = size;
+      this.cursor = 0;
+      this.traversalStack = new Stack<>();
+      this.expectedModCount = size;
       //start from the root node and 0th index.
-      recursionStack.push(new SimpleEntry<>(root, 0));
+      this.traversalStack.push(new SimpleEntry<>(root, 0));
+    }
+
+    final void checkForCoModification() {
+      if (size != this.expectedModCount)
+        throw new ConcurrentModificationException();
     }
 
     @Override
     public boolean hasNext() {
-      return cursor < size;
+      return this.cursor < size;
     }
 
     /**
@@ -452,16 +453,16 @@ public class BTree<E> implements SortedSetTree<E> {
     @Override
     public E next() {
       checkForCoModification();
-      while (!recursionStack.isEmpty() && !isEmpty()) {
-        Entry<Node, Integer> entry = recursionStack.pop();
+      while (!this.traversalStack.isEmpty() && !isEmpty()) {
+        Entry<Node, Integer> entry = this.traversalStack.pop();
         Node currentNode = entry.getKey();
         int currentIndex = entry.getValue();
         if (currentNode.isLeaf()) {
           E value = currentNode.get(currentIndex);
-          cursor++;
+          this.cursor++;
           // if the current node has more elements, push the same node in stack with the next index to access.
           if (currentIndex < currentNode.size() - 1) {
-            recursionStack.push(new SimpleEntry<>(currentNode, currentIndex + 1));
+            this.traversalStack.push(new SimpleEntry<>(currentNode, currentIndex + 1));
           }
           return value;
         } else {
@@ -472,13 +473,13 @@ public class BTree<E> implements SortedSetTree<E> {
           }
           // if the current node has more elements, push the same node in stack with the next index to access.
           if (currentIndex < currentNode.size()) {
-            recursionStack.push(new SimpleEntry<>(currentNode, currentIndex + 1));
+            this.traversalStack.push(new SimpleEntry<>(currentNode, currentIndex + 1));
           }
           //push the children at index to the stack, so it's available in the next iteration to be traversed.
           Node child = currentNode.getChild(currentIndex);
-          recursionStack.push(new SimpleEntry<>(child, 0));
+          this.traversalStack.push(new SimpleEntry<>(child, 0));
           if (value != null) {
-            cursor++;
+            this.cursor++;
             return value;
           }
         }
@@ -498,7 +499,6 @@ public class BTree<E> implements SortedSetTree<E> {
   abstract class Node {
     List<E> values;
     List<Node> children;
-    Comparator<Node> childNodeComparator;
     Node parent;
     int size;
     int childrenSize;
@@ -523,18 +523,18 @@ public class BTree<E> implements SortedSetTree<E> {
      * @return no of non-null elements in current node
      */
     int size() {
-      return size;
+      return this.size;
     }
 
     /**
      * @return the no of non-null child nodes in current node
      */
     int childrenSize() {
-      return childrenSize;
+      return this.childrenSize;
     }
 
     boolean isLeaf() {
-      return childrenSize == 0;
+      return this.childrenSize == 0;
     }
   }
   // End Abstract Node
@@ -547,6 +547,8 @@ public class BTree<E> implements SortedSetTree<E> {
    * A list of pointers to the child nodes, and its count
    */
   private class DataNode extends Node {
+
+    private final Comparator<Node> childNodeComparator;
 
     // access is private, so that it can only be accessed in the BTree Class
     private DataNode(Node parent, E value) {
@@ -561,10 +563,10 @@ public class BTree<E> implements SortedSetTree<E> {
       this.values = new ArrayList<>(order);
       this.children = new ArrayList<>(order + 1);
       for (int i = 0; i < order; i++) {
-        children.add(new NullNode());
-        values.add(null);
+        this.children.add(new NullNode());
+        this.values.add(null);
       }
-      children.add(new NullNode());
+      this.children.add(new NullNode());
       this.size = 0;
       this.childrenSize = 0;
       //sort child nodes by the comparable value of first element of each child node
@@ -573,7 +575,7 @@ public class BTree<E> implements SortedSetTree<E> {
 
     @Override
     Node getParent() {
-      return parent;
+      return this.parent;
     }
 
     /**
@@ -592,7 +594,7 @@ public class BTree<E> implements SortedSetTree<E> {
      */
     @Override
     E get(int index) {
-      return values.get(index);
+      return this.values.get(index);
     }
 
     /**
@@ -603,8 +605,8 @@ public class BTree<E> implements SortedSetTree<E> {
      */
     @Override
     boolean add(E value) {
-      E isSet = values.set(size++, value);
-      values.sort(comparisonStrategy);
+      E isSet = this.values.set(size++, value);
+      this.values.sort(comparisonStrategy);
       return isSet != null;
     }
 
@@ -614,7 +616,7 @@ public class BTree<E> implements SortedSetTree<E> {
      */
     @Override
     Node getChild(int index) {
-      return children.get(index);
+      return this.children.get(index);
     }
 
     /**
@@ -626,8 +628,8 @@ public class BTree<E> implements SortedSetTree<E> {
     @Override
     boolean addChild(Node child) {
       child.parent = this;
-      Node addedValue = children.set(childrenSize++, child);
-      children.sort(childNodeComparator);
+      Node addedValue = this.children.set(childrenSize++, child);
+      this.children.sort(childNodeComparator);
       return !addedValue.isNull();
     }
 
@@ -640,15 +642,15 @@ public class BTree<E> implements SortedSetTree<E> {
         return false;
       }
       boolean childNodeFound = false;
-      for (int i = 0; i < childrenSize; i++) {
-        if (children.get(i).equals(child)) {
+      for (int i = 0; i < this.childrenSize; i++) {
+        if (this.children.get(i).equals(child)) {
           childNodeFound = true;
         } else if (childNodeFound) {
-          children.set(i - 1, children.get(i));
+          this.children.set(i - 1, this.children.get(i));
         }
       }
       if (childNodeFound) {
-        children.set(--childrenSize, new NullNode());
+        this.children.set(--this.childrenSize, new NullNode());
       }
       return childNodeFound;
     }
