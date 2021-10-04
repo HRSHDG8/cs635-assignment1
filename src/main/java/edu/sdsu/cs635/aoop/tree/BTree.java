@@ -730,6 +730,7 @@ public class BTree<E> implements SortedSetTree<E> {
 
     @Override
     public String toString() {
+      // Null Node must return empty string to not change the actual nodes
       return "";
     }
   }
