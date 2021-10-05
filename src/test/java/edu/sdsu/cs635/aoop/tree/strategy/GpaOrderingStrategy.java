@@ -4,6 +4,7 @@ import edu.sdsu.cs635.aoop.model.Student;
 import edu.sdsu.cs635.aoop.tree.BTree;
 import edu.sdsu.cs635.aoop.tree.SortedSetTree;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;
@@ -33,6 +34,7 @@ public class GpaOrderingStrategy {
 
 
   @Test
+  @DisplayName("The first element should be the lowest element as per the passed strategy")
   public void firstStudentShouldBeAlex() {
     Student lowestGpaStudent = studentTree.get(0);
     assertEquals(2.84, lowestGpaStudent.getGpa());

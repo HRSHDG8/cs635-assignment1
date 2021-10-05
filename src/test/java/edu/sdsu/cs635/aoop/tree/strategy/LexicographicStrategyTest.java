@@ -4,6 +4,7 @@ import edu.sdsu.cs635.aoop.model.Student;
 import edu.sdsu.cs635.aoop.tree.BTree;
 import edu.sdsu.cs635.aoop.tree.SortedSetTree;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;
@@ -34,6 +35,7 @@ public class LexicographicStrategyTest {
 
 
   @Test
+  @DisplayName("The first element should be the lowest element as per the passed strategy")
   public void firstStudentShouldBeAlex() {
     Student firstStudent = studentTree.get(0);
     assertEquals("Alex", firstStudent.getName());
