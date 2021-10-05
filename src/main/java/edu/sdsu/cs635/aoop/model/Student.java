@@ -28,7 +28,7 @@ public class Student {
     return redId;
   }
 
-  public boolean amIProbationary() {
+  public boolean isProbationary() {
     return gpa < 2.85;
   }
 

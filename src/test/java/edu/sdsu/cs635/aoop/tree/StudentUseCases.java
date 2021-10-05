@@ -2,6 +2,7 @@ package edu.sdsu.cs635.aoop.tree;
 
 import edu.sdsu.cs635.aoop.model.Student;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -37,6 +38,7 @@ public class StudentUseCases {
   }
 
   @Test
+  @DisplayName("List all students with perfect score as reverse in-order traversal")
   public void studentsWithPerfectGpa() {
     List<Student> perfectScoreStudents = new ArrayList<>();
     studentTree.forEach(student -> {
@@ -48,12 +50,13 @@ public class StudentUseCases {
   }
 
   @Test
+  @DisplayName("List all probationary students as in-order traversal")
   public void probationaryStudents() {
     List<Long> probationaryStudentsId = StreamSupport.stream(Spliterators.spliteratorUnknownSize(
              studentTree.iterator(),
              Spliterator.ORDERED)
           , false)
-       .filter(Student::amIProbationary)
+       .filter(Student::isProbationary)
        .map(Student::getRedId)
        .collect(Collectors.toList());
 
