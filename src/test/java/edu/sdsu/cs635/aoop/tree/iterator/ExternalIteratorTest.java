@@ -27,6 +27,7 @@ public class ExternalIteratorTest {
 
   @Test
   public void iteratorTest() {
+    //test double, lexicographically ordered name of students in ascending fashion
     String[] expectedOrder = new String[]{"Alex", "Jack", "Joshua", "Marrissa", "Max", "Olivia"};
     AtomicInteger index = new AtomicInteger(0);
     for (Student student : studentTree) {

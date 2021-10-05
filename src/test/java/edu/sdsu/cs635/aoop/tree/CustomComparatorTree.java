@@ -1,6 +1,7 @@
 package edu.sdsu.cs635.aoop.tree;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;
@@ -25,11 +26,13 @@ public class CustomComparatorTree {
   }
 
   @Test
+  @DisplayName("First element in the tree should be the largest element for a reversed strategy")
   public void firstElementShouldBeLargest() {
     assertEquals(9, numberTree.get(0));
   }
 
   @Test
+  @DisplayName("Last element in the tree should be the smallest element for a reversed strategy")
   public void lastElementShouldBeSmallest() {
     assertEquals(0, numberTree.get(numberTree.size() - 1));
   }

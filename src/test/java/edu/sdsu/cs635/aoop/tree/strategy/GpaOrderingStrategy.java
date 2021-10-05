@@ -28,7 +28,8 @@ public class GpaOrderingStrategy {
   }
 
   @Test
-  public void createsATreeOfSizeN() {
+  @DisplayName("Check if the size of the created tree is equal to the number of elements inserted")
+  public void testSize() {
     assertEquals(6, studentTree.size());
   }
 

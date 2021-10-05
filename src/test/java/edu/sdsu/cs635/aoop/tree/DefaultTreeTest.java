@@ -118,7 +118,7 @@ public class DefaultTreeTest {
     assertEquals(0, numberTree.comparator().compare(1, 1));
   }
 
-  // These functions are not yet implemented
+  // These functions are not yet implemented just make sure they are either returning empty or false
   @Test
   public void trivialTests() {
     assertTrue(numberTree.subSet(1, 1).isEmpty());
