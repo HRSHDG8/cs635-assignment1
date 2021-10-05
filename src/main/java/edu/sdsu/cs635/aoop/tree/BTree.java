@@ -622,9 +622,6 @@ public class BTree<E> implements SortedSetTree<E> {
      */
     @Override
     boolean removeChild(Node child) {
-      if (isLeaf()) {
-        return false;
-      }
       boolean childNodeFound = false;
       for (int i = 0; i < this.childrenSize; i++) {
         if (this.children.get(i).equals(child)) {
@@ -653,11 +650,8 @@ public class BTree<E> implements SortedSetTree<E> {
         E value = this.get(i);
         acceptor.accept(value);
       }
-      //for every non leaf node, call reverseOrder for the first Child Node of the current Node
-//      if (!this.isLeaf()) {
       Node firstNode = this.getChild(0);
       firstNode.forEach(acceptor);
-//      }
     }
 
     @Override
