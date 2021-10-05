@@ -341,6 +341,7 @@ public class BTree<E> implements SortedSetTree<E> {
     } else {
       Node parent = nodeUnderSplit.getParent();
       parent.add(medianValue);
+      // remove the current node and replace add the new split nodes instead
       parent.removeChild(nodeUnderSplit);
       parent.addChild(left);
       parent.addChild(right);
