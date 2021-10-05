@@ -59,15 +59,17 @@ public class StudentUseCases {
        .filter(Student::isProbationary)
        .map(Student::getRedId)
        .collect(Collectors.toList());
-
-    assertEquals(1, probationaryStudentsId.size());
-    assertEquals(825000005L, probationaryStudentsId.get(0));
+    int expectedSize = 1;
+    Long expectedRedId = 825000005L;
+    assertEquals(expectedSize, probationaryStudentsId.size());
+    assertEquals(expectedRedId, probationaryStudentsId.get(0));
   }
 
   @Test
   public void getStudentAtIndex() {
-    Student lastStudent = studentTree.get(studentTree.size() - 1);
-    assertEquals("Zack", lastStudent.getName());
+    Student actualStudent = studentTree.get(studentTree.size() - 1);
+    String expectedStudentName = "Zack";
+    assertEquals(expectedStudentName, actualStudent.getName());
   }
 
   @Test
