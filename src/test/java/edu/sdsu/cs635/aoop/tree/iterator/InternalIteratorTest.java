@@ -29,8 +29,6 @@ public class InternalIteratorTest {
   public void internalIteratorMustBeReverseOrder() {
     String[] expectedTestOrder = new String[]{"Olivia", "Max", "Marrissa", "Joshua", "Jack", "Alex"};
     AtomicInteger index = new AtomicInteger(0);
-    studentTree.forEach(student -> {
-      assertEquals(expectedTestOrder[index.getAndIncrement()], student.getName());
-    });
+    studentTree.forEach(student -> assertEquals(expectedTestOrder[index.getAndIncrement()], student.getName()));
   }
 }

@@ -131,7 +131,7 @@ public class BTree<E> implements SortedSetTree<E> {
 
   @Override
   public void forEach(Consumer<? super E> acceptor) {
-    reverseOrder(this.root, acceptor);
+    this.root.forEach(acceptor);
   }
 
   @Override
@@ -368,28 +368,6 @@ public class BTree<E> implements SortedSetTree<E> {
     return replacementNode;
   }
 
-
-  /**
-   * Internal iterator implementation to support forEach Method to iterate over the {@link BTree} in reverse order.
-   *
-   * @param currentNode is the node under recursion
-   * @param acceptor    is the {@link Consumer} passed by the client
-   */
-  private void reverseOrder(Node currentNode, Consumer<? super E> acceptor) {
-    for (int i = currentNode.size() - 1; i >= 0; i--) {
-      //start from the right most child until you reach the leaf node.
-      Node child = currentNode.getChild(i + 1);
-      reverseOrder(child, acceptor);
-      E value = currentNode.get(i);
-      acceptor.accept(value);
-    }
-    //for every non leaf node, call reverseOrder for the first Child Node of the current Node
-    if (!currentNode.isLeaf()) {
-      Node firstNode = currentNode.getChild(0);
-      reverseOrder(firstNode, acceptor);
-    }
-  }
-
   // - End private methods
 
   // -- Start External Iterator Class
@@ -520,6 +498,8 @@ public class BTree<E> implements SortedSetTree<E> {
 
     abstract boolean isNull();
 
+    abstract void forEach(Consumer<? super E> acceptor);
+
     /**
      * @return no of non-null elements in current node
      */
@@ -617,6 +597,9 @@ public class BTree<E> implements SortedSetTree<E> {
      */
     @Override
     Node getChild(int index) {
+      if (index >= this.children.size() || index < 0) {
+        return new NullNode();
+      }
       return this.children.get(index);
     }
 
@@ -662,6 +645,22 @@ public class BTree<E> implements SortedSetTree<E> {
     }
 
     @Override
+    void forEach(Consumer<? super E> acceptor) {
+      for (int i = this.size() - 1; i >= 0; i--) {
+        //start from the right most child until you reach the leaf node.
+        Node child = this.getChild(i + 1);
+        child.forEach(acceptor);
+        E value = this.get(i);
+        acceptor.accept(value);
+      }
+      //for every non leaf node, call reverseOrder for the first Child Node of the current Node
+//      if (!this.isLeaf()) {
+      Node firstNode = this.getChild(0);
+      firstNode.forEach(acceptor);
+//      }
+    }
+
+    @Override
     public String toString() {
       StringBuilder nodeAsString = new StringBuilder();
       for (int i = 0; i < this.size(); i++) {
@@ -673,10 +672,8 @@ public class BTree<E> implements SortedSetTree<E> {
         nodeAsString.append(value.toString());
       }
       //for every non leaf node, call inOrder for the last Child Node of the current Node
-      if (!this.isLeaf()) {
-        Node lastNode = this.getChild(this.childrenSize() - 1);
-        nodeAsString.append(lastNode.toString());
-      }
+      Node lastNode = this.getChild(this.childrenSize() - 1);
+      nodeAsString.append(lastNode.toString());
       return nodeAsString.toString();
     }
   }
@@ -726,6 +723,11 @@ public class BTree<E> implements SortedSetTree<E> {
     @Override
     boolean isNull() {
       return true;
+    }
+
+    @Override
+    void forEach(Consumer<? super E> acceptor) {
+
     }
 
     @Override
