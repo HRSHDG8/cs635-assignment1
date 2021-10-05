@@ -103,7 +103,6 @@ public class BTree<E> implements SortedSetTree<E> {
     }
     increaseSize();
     //base condition to insert the very first value
-    //null object pattern helps here to avoid == null checks
     if (this.root.isNull()) {
       // as per null object pattern pass a NullNode as parent of root, rather than null.
       this.root = new DataNode(new NullNode(), value);
