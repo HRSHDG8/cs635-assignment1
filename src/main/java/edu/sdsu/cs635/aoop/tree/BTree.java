@@ -21,6 +21,7 @@ public class BTree<E> implements SortedSetTree<E> {
   private int size;
 
   // - Start Constructor Declarations
+
   public BTree() {
     this(DEFAULT_ORDER);
   }
@@ -41,9 +42,11 @@ public class BTree<E> implements SortedSetTree<E> {
     // comparing with the strategy passed by API consumer and make it null tolerant with Comparator.nullsLast
     this.comparisonStrategy = Comparator.nullsLast(strategy);
   }
+
   // - End Constructor Declarations
 
   // - Start java.util.Set Api Methods
+
   @Override
   public int size() {
     return this.size;
@@ -169,9 +172,11 @@ public class BTree<E> implements SortedSetTree<E> {
     this.size = 0;
     this.root = new NullNode();
   }
+
   // - End java.util.Set API Methods
 
   // - Start java.util.SortedSet Api Methods
+
   @Override
   public Comparator<? super E> comparator() {
     return this.comparisonStrategy;
