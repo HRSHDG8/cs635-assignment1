@@ -725,7 +725,7 @@ public class BTree<E> implements SortedSetTree<E> {
 
     @Override
     void forEach(Consumer<? super E> acceptor) {
-
+      // do nothing for a null node
     }
 
     @Override
