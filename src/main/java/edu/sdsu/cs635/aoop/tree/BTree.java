@@ -279,12 +279,12 @@ public class BTree<E> implements SortedSetTree<E> {
    */
   private boolean checkAndInsertInCurrentNode(Node currentNode, E valueToBeAdded) {
     if (currentNode.isLeaf()) {
-      currentNode.add(valueToBeAdded);
+      boolean isAdded = currentNode.add(valueToBeAdded);
       if (currentNode.size() <= this.maximumValuesInNode) {
-        return true;
+        return isAdded;
       }
       splitAndBalance(currentNode);
-      return true;
+      return isAdded;
     }
     return false;
   }
