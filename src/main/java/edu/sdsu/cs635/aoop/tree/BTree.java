@@ -384,7 +384,7 @@ public class BTree<E> implements SortedSetTree<E> {
   class InOrderTreeIterator implements Iterator<E> {
     // index of next element to return
     int cursor;
-    // This field is to keep a copy of the expected modification count of the BTree in this case its the size.
+    // This field is to keep a copy of the expected modification count of the BTree in this case it's the size.
     // the logic works with tree since we don't have a remove function and tree size can not decrease.
     // implement modCount logic on tree in next release and use that to check for modification
     int expectedModCount;
