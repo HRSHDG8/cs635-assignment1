@@ -659,6 +659,10 @@ public class BTree<E> implements SortedSetTree<E> {
       firstNode.forEach(acceptor);
     }
 
+
+    /**
+     * In-order view of the tree as a string.
+     */
     @Override
     public String toString() {
       StringBuilder nodeAsString = new StringBuilder();
