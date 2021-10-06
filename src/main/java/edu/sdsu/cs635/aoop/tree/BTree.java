@@ -483,7 +483,6 @@ public class BTree<E> implements SortedSetTree<E> {
   abstract class Node {
     List<E> values;
     List<Node> children;
-    Node parent;
     int size;
     int childrenSize;
 
@@ -534,6 +533,7 @@ public class BTree<E> implements SortedSetTree<E> {
    */
   private class DataNode extends Node {
 
+    Node parent;
     private final Comparator<Node> childNodeComparator;
 
     // access is private, so that it can only be accessed in the BTree Class
@@ -616,7 +616,7 @@ public class BTree<E> implements SortedSetTree<E> {
      */
     @Override
     boolean addChild(Node child) {
-      child.parent = this;
+      child.setParent(this);
       Node addedValue = this.children.set(childrenSize++, child);
       this.children.sort(childNodeComparator);
       return !addedValue.isNull();
