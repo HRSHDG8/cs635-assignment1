@@ -72,10 +72,6 @@ public class BTree<E> implements SortedSetTree<E> {
     return new InOrderTreeIterator();
   }
 
-  private boolean isIndexOutOfBound(int index) {
-    return index >= this.size || index < 0;
-  }
-
   @Override
   public Object[] toArray() {
     Object[] array = new Object[this.size];
@@ -371,6 +367,10 @@ public class BTree<E> implements SortedSetTree<E> {
       }
     }
     return replacementNode;
+  }
+
+  private boolean isIndexOutOfBound(int index) {
+    return index >= this.size || index < 0;
   }
 
   // - End private methods
